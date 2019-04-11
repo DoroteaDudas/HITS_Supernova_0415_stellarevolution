@@ -1,0 +1,3231 @@
+<!DOCTYPE html>
+<!-- @author: Dorotea Dudas	@date 20/02/18 -->
+<html lang="en">
+	<head>
+		<title>Stars</title>
+		<meta charset="utf-8"><meta name="author" content="Dorotea Dudas"><meta name="date" content="20-02-2018"> <!--scheme="DD-MM-YYYY"-->
+		<style>
+			body {
+				margin				: 0px;
+				background-color		: #000000;
+				overflow			: hidden;
+				/* disable text selection */
+				-webkit-user-select		: none;
+				-moz-user-select		: -moz-none;
+				-ms-user-select			: none;
+				user-select			: none;
+				-webkit-touch-callout		: none;
+				-khtml-user-select		: none;
+			}
+			font, span {
+				font-family: "HelveticaNeueLT Com 55 Roman", "Helvetica Neue LT Com", sans-serif; /*"HelveticaNeueLT Com 45 Lt", "Helvetica Neue LT Com", sans-serif; */
+			}
+			img {
+				-moz-user-select		: none;
+				-webkit-user-select		: none;
+				-ms-user-select			: none;
+				user-select			: none;
+				-webkit-user-drag		: none;
+				user-drag			: none;
+				-webkit-touch-callout		: none;
+			}			
+
+			::-webkit-scrollbar {
+				width: 40px;
+			}
+			::-webkit-scrollbar-track {
+				-webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.7); 
+				border-radius: 0px;
+			}
+			::-webkit-scrollbar-thumb {
+				border-radius: 0px;
+				-webkit-box-shadow: inset 0 0 6px rgba(0,119,190,0.5); 
+				background-color: rgba(0,119,190,0.8); 				
+			}	
+
+			#menu_main { /* main (vertical) menu */
+				z-index		:200;
+				opacity		:0.9;
+				position	:absolute; 
+				bottom		:20px; 
+				right		:-20px;
+				width		:186px;
+				height		:710px;
+				background	: rgba(128,128,128,0.0);
+				color		: #BDBDBD;
+				border-radius	: 10px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;	
+			}
+			#menu_time { /* time (horizontal) menu */
+				z-index		:2;
+				opacity		:0.9;
+				position	:absolute; 
+				bottom		:20px; 
+				left		:230px;
+				width		:1490px;
+				height		:360px;				
+				background	: rgba(128,128,128,0.0);
+				color		: #BDBDBD;
+				border-radius	: 10px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;	
+			}
+			
+			/* radio time buttons */
+			#radioTime{/*small camera view*/
+				z-index		: 2;
+				position	: absolute;				
+				font-size	: 70%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				border-radius	: 0px;
+				border-color	: rgba(0,119,190,0.0);
+				border-style	: solid;
+				border-width	: 5px;
+				text-align	: center;
+			}	
+			#radioTime .ui-button.ui-state-active {
+				background-color: rgba(128,128,256,0.3);
+				color		: #ffffff;
+				border-width	: 5px;
+				border-color	: rgba(0,119,190,1.0);
+			}
+			#radioTime .ui-button {
+				background-color: rgba(128,128,128,0.0);
+				border-color	: rgba(128,128,128,0.0);
+				color		: #ffffff;
+			}						
+			
+			/* radio mass buttons */
+			#radioMass{/*small camera view*/
+				z-index		: 2;
+				position	: absolute;				
+				font-size	: 70%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.0);
+				padding		: 5px;
+				padding-top	: 4px;
+				padding-bottom	: 4px;
+				border-radius	: 0px;
+				border-color	: black;
+				border-style	: solid;
+				border-width	: 0px;
+				text-align	: center;
+			}	
+			#radioMass .ui-button.ui-state-active {
+				background-color: rgba(128,128,256,0.3);
+				color		: #ffffff;
+			}
+			#radioMass .ui-button {
+				background-color: rgba(128,128,128,0.0);
+				border-color	: rgba(128,128,128,0.0);
+				color		: #ffffff;
+			}						
+
+			/*dialog*/
+			#dialogMain {
+				z-index		: 2;
+				font-size	: 150%;
+				color		: #BDBDBD;
+				background	: rgba(98,98,98,0.8);
+				padding		: 5px;
+				padding-top	: 5px;
+				padding-bottom	: 5px;
+				border-radius	: 0px;
+				border-color	: rgba(0,119,190,1.0);
+				border-style	: solid;
+				border-width	: 5px;		
+				overflow	: hidden; /* no scrollbars */
+			} 			
+			
+			/*standard buttons*/
+			/*vertical alignment of the image within a div*/
+			.helper {
+				display: inline-block;
+				height: 100%;
+				vertical-align: middle;
+			}			
+			
+			/*dialog*/
+			.dlg-no-title .ui-dialog-titlebar {
+				display: none;
+			}			
+			.ui-widget-content.ui-dialog {
+				background: rgba(128,128,128,0.0) !important;
+				border: 2px solid rgba(128,128,128,0.0);
+				/*place the dialog on the top of all buttons*/
+/* 				position	: relative; */ /* position of other dialogs is messed up */
+				z-index		: 10;				
+ 			} 
+			#dialogHelp {
+				position	: relative;
+				z-index		: 3;
+				font-size	: 150%;
+				color		: #BDBDBD;
+				background	: rgba(128,128,128,0.6);
+			}
+			
+			/* zoom */
+			#menu_main, #arrowMass {/*GUI scale (if scaling within code using browser zoom make sure this is 1.0)*/
+				transform: scale(0.75);
+				transform-origin: 0% 100%;
+			}			
+			#menu_time {
+				transform: scale(1.0);
+			}
+			.dlg-no-title { /* dialog class */
+				transform-origin: 0 100%;
+			}
+		</style>
+		<link  href="scripts/jquery-ui.css" rel="stylesheet"> <!--change .ui-widget-header .ui-state-default border to 0px, also ui-state-focus, ui-state-active-->
+		<script src="scripts/jquery-1.9.1.js"></script>
+		<script src="scripts/jquery-ui.js"></script>		
+		<script src="scripts/jquery.ui.dialog-clickoutside.js"></script>
+		<script src="text.js"></script>
+	</head>
+	<body>
+		<div id="menu_main">
+			<div id="radioMass">
+			<input type="radio" class="dialogRadioClass" id="starButtonBlue" name="radioMassOptions"><label for="starButtonBlue"><div id="starButtonBlue"></div></label>		
+			<input type="radio" class="dialogRadioClass" id="starButtonWhite" name="radioMassOptions"><label for="starButtonWhite"><div id="starButtonWhite"></div></label>
+			<input type="radio" class="dialogRadioClass" id="starButtonYellow" name="radioMassOptions"><label for="starButtonYellow"><div id="starButtonYellow"></div></label>	
+			<input type="radio" class="dialogRadioClass" id="starButtonOrange" name="radioMassOptions"><label for="starButtonOrange"><div id="starButtonOrange"></div></label>	
+			<input type="radio" class="dialogRadioClass" id="starButtonRed" name="radioMassOptions"><label for="starButtonRed"><div id="starButtonRed"></div></label>	
+			</div>				
+		</div>
+		<div id="menu_time">
+			<div id="arrowBig"></div>	
+		
+			<div id="radioTime">
+			<input type="radio" class="dialogRadioClass" id="starButtonProto" name="radioTimeOptions"  checked="checked"><label for="starButtonProto"><div id="starButtonProto"></div></label>		
+			<input type="radio" class="dialogRadioClass" id="starButtonMS" name="radioTimeOptions"><label for="starButtonMS"><div id="starButtonMS"></div></label>	
+			<input type="radio" class="dialogRadioClass" id="starButtonPMS" name="radioTimeOptions"><label for="starButtonPMS"><div id="starButtonPMS"></div></label>	
+			<input type="radio" class="dialogRadioClass" id="starButtonDeath" name="radioTimeOptions"><label for="starButtonDeath"><div id="starButtonDeath"></div></label>	
+			</div>		
+		</div>
+		<div id="dialogMain" title="Dialog" align="center"></div>
+		<div id="container"></div>
+		
+		<script src="scripts/three69.js"></script>
+		<script src="scripts/TrackballControls.js"></script>	
+		<script type="text/javascript" src="scripts/ShaderParticles.js"></script>
+		
+		
+		<!-- stars -->
+		<script id="fragmentShaderStar" type="x-shader/x-fragment">							//materialSun								(OK)			(used)
+			varying vec2 vUv;
+			varying float noise;
+			varying vec3 vNormal;
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+			uniform float time;
+ 			//uniform vec2 resolution;
+			
+			float random( vec3 scale, float seed ){
+				return fract( sin( dot( gl_FragCoord.xyz + seed, scale ) ) * 43758.5453 + seed ) ;
+			}
+			void main() {
+				// get a random offset
+				float r = .01 * random( vec3( 12.9898, 78.233, 151.7182 ), 0.0 );
+				// lookup vertically in the texture, using noise and offset
+				// to get the right RGB colour
+				vec2 tPos = vec2( 0, 1.9 * noise + r );
+				vec4 color = texture2D( texture2, tPos );
+				gl_FragColor = vec4( color.rgb, 1.0 );
+				
+				
+				//lava
+				vec2 position = -1.0 + 2.0 * vUv;
+				vec4 noise2 = texture2D( texture1, vUv );
+				vec2 T1 = vUv + vec2( 1.5, -1.5 ) * time * 0.02;
+				vec2 T2 = vUv + vec2( -0.5, 2.0 ) * time * 0.01;
+				T1.x += noise2.x * 2.0;
+				T1.y += noise2.y * 2.0;
+				T2.x -= noise2.y * 0.2;
+				T2.y += noise2.z * 0.2;
+				float p = texture2D( texture1, T1 * 2.0 ).a;//t1
+				color = texture2D( texture2, T1 * 1.0 );//vec4 //t2 2.0
+				vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+				if( temp.r > 1.0 ){ temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+				if( temp.g > 1.0 ){ temp.rb += temp.g - 1.0; }
+				if( temp.b > 1.0 ){ temp.rg += temp.b - 1.0; }
+				gl_FragColor = temp;
+				gl_FragColor = mix( gl_FragColor, vec4(color.rgb, gl_FragColor.w ), 0.95 );
+			}
+		</script>
+		<script id="vertexShaderStar" type="x-shader/x-vertex">								//materialSun, materialSun1		 				(OK)			(used)
+			//attribute float displacement;//currently not used
+			varying vec3 vNormal;
+			uniform float time;
+			varying float noise;
+			varying vec2 vUv;
+			
+			//perlin noise for playing around
+
+			// GLSL textureless classic 3D noise "cnoise", with an RSL-style periodic variant "pnoise".
+			// Author: Stefan Gustavson (stefan.gustavson@liu.se)	
+			// Version: 2011-10-11
+			// Many thanks to Ian McEwan of Ashima Arts for the ideas for permutation and gradient selection.
+			//
+			// Copyright (c) 2011 Stefan Gustavson. All rights reserved. Distributed under the MIT license. See LICENSE file.
+			// https://github.com/ashima/webgl-noise
+			//
+			vec3 mod289(vec3 x) {
+				return x - floor(x * (1.0 / 289.0)) * 289.0;
+			}
+			vec4 mod289(vec4 x) {
+				return x - floor(x * (1.0 / 289.0)) * 289.0;
+			}
+			vec4 permute(vec4 x) {
+				return mod289(((x*34.0)+1.0)*x);
+			}
+			vec4 taylorInvSqrt(vec4 r) {
+				return 1.79284291400159 - 0.85373472095314 * r;
+			}
+			vec3 fade(vec3 t) {
+				return t*t*t*(t*(t*6.0-15.0)+10.0);
+			}
+			float pnoise(vec3 P, vec3 rep) {// Classic Perlin noise, periodic variant
+				vec3 Pi0 = mod(floor(P), rep); // Integer part, modulo period			//cnoise: vec3 Pi0 = floor(P); // Integer part for indexing
+				vec3 Pi1 = mod(Pi0 + vec3(1.0), rep); // Integer part + 1, mod period		//cnoise: vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+				Pi0 = mod289(Pi0);
+				Pi1 = mod289(Pi1);
+				vec3 Pf0 = fract(P); // Fractional part for interpolation
+				vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+				vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+				vec4 iy = vec4(Pi0.yy, Pi1.yy);
+				vec4 iz0 = Pi0.zzzz;
+				vec4 iz1 = Pi1.zzzz;
+
+				vec4 ixy = permute(permute(ix) + iy);
+				vec4 ixy0 = permute(ixy + iz0);
+				vec4 ixy1 = permute(ixy + iz1);
+
+				vec4 gx0 = ixy0 * (1.0 / 7.0);
+				vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+				gx0 = fract(gx0);
+				vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+				vec4 sz0 = step(gz0, vec4(0.0));
+				gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+				gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+				vec4 gx1 = ixy1 * (1.0 / 7.0);
+				vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+				gx1 = fract(gx1);
+				vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+				vec4 sz1 = step(gz1, vec4(0.0));
+				gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+				gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+				vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+				vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+				vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+				vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+				vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+				vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+				vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+				vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+				vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+				g000 *= norm0.x;
+				g010 *= norm0.y;
+				g100 *= norm0.z;
+				g110 *= norm0.w;
+				vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+				g001 *= norm1.x;
+				g011 *= norm1.y;
+				g101 *= norm1.z;
+				g111 *= norm1.w;
+
+				float n000 = dot(g000, Pf0);
+				float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+				float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+				float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+				float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+				float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+				float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+				float n111 = dot(g111, Pf1);
+
+				vec3 fade_xyz = fade(Pf0);
+				vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+				vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+				float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
+				return 2.2 * n_xyz;
+			}
+			float turbulence( vec3 p ) {
+				float w = 100.0;
+				float t = -.5;
+				for (float f = 1.0 ; f <= 10.0 ; f++ ){
+					float power = pow( 2.0, f );
+					t += abs( pnoise( vec3( power * p ), vec3( 10.0, 10.0, 10.0 ) ) / power );//no idea what pnoise is 
+				}
+				return t;
+			}
+
+ 			void main() {
+				vUv = uv;
+// 				vNormal = normalize( normalMatrix * normal );//just for glow
+				vNormal = normalize( normal );//for SunShader
+				
+				noise = 10.0 * (-0.10) * turbulence( .5 * normal + time);// get a turbulent 3d noise using the normal, normal to high freq
+				float b = 5.0 * pnoise( 0.05 * position + vec3( 2.0 * time ), vec3( 100.0 ) );// get a 3d noise using the position, low frequency
+				float displacement2 = - noise + b;// compose both noises
+				
+				// move the position along the normal and transform it
+				vec3 newPosition = position + normal * ( displacement2 * 0.03);//displacement
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+// 				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}	
+ 		</script>
+		
+		<!--protostar-->
+		<script id="vertexshaderPointCloud" type="x-shader/x-vertex">//with sprite rotation		//shaderMaterialPointCloud, shaderMaterialPointCloud2 (clone), shaderMaterialPointCloud3 (clone), shaderMaterialGalaxy (clone)	(OK) (merged)	(used)
+			attribute float variableSize;
+			uniform float factor;
+			attribute vec3 variableColor;
+			attribute float variableRotation;
+			
+			varying vec3 vColor;
+			varying float vRotation;//https://github.com/mrdoob/three.js/issues/1891
+			
+			void main() {
+				vColor = variableColor;
+				vRotation = variableRotation;
+				
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+				gl_PointSize = variableSize * ( factor / length( mvPosition.xyz ) );
+				gl_Position = projectionMatrix * mvPosition ;
+			}
+		</script>
+		<script id="fragmentshaderPointCloud" type="x-shader/x-fragment">//with sprite rotation		//shaderMaterialPointCloud, shaderMaterialPointCloud2 (clone), shaderMaterialPointCloud3 (clone), shaderMaterialGalaxy (clone)	(OK)( merged)	(used)
+			uniform vec3 color;
+			uniform float factor2;
+			uniform sampler2D texture1;
+
+			varying vec3 vColor;
+			varying float vRotation;
+
+			void main() {
+				float mid = 0.5;
+				vec2 rotated = vec2(cos(vRotation) * (gl_PointCoord.x - mid) + sin(vRotation) * (gl_PointCoord.y - mid) + mid,
+									cos(vRotation) * (gl_PointCoord.y - mid) - sin(vRotation) * (gl_PointCoord.x - mid) + mid);			
+			
+				gl_FragColor = vec4( color * vColor, factor2 );
+				gl_FragColor = gl_FragColor * texture2D( texture1, rotated );//texture2D( texture1, gl_PointCoord );
+			}
+		</script>		
+	
+		<script id="vertexShader" type="x-shader/x-vertex">//replacing: vertexShaderDwarf, vertexShaderWhiteDwarf, vertexShaderNebula, vertexShaderNeutron, vertexShaderNeutronHole
+			varying vec2 vUv;
+			void main() {
+				vUv = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>				
+		
+		<!--brown dwarf-->
+			<!--brown dwarf (using vertexShader) -->
+		<script id="fragmentShaderDwarf" type="x-shader/x-fragment">//red brown dwarf					//materialDwarf								(OK)			(used)
+			varying vec2 vUv;
+			uniform float time;
+			uniform sampler2D texture1;
+			
+			void main(void) {
+				float warpSpeed = 0.3;
+				float warpDistance = 0.02;
+				
+				vec2 uv = vUv.xy / vec2(1,1);
+				uv.x -= time* 0.025;
+				uv.y *= -1.0;
+				
+				vec3 offTexX = texture2D(texture1, uv).rgb;
+				vec3 luma = vec3(0.299, 0.587, 0.114);
+				float power = dot(offTexX, luma);
+				power = sin(3.1415927*2.0 * mod(power + time * warpSpeed, 1.0));
+				gl_FragColor = texture2D(texture1, uv+vec2(0, power)*warpDistance);
+
+				//red
+				if(gl_FragColor.g > 0.13 && gl_FragColor.b > 0.13 ){gl_FragColor.a = 0.0;}
+// 				//blue
+// 				if(gl_FragColor.b < 0.37){gl_FragColor.a = 0.0;}
+			}
+		</script>		
+			<!--brown dwarf (using vertexShaderStar) -->
+		<script id="fragmentShaderSun" type="x-shader/x-fragment">//orange						//materialSun1							(OK)			(used)
+			varying vec2 vUv;
+			uniform float time;
+			varying vec3 vNormal;//not used
+	
+			const float timeScale = 1.0;
+			const float radius = 2.6;
+			const bool darkspots = true;
+			const bool brightspots = true;
+			float T = time;
+
+			// GLSL textureless classic 4D noise "cnoise", with an RSL-style periodic variant "pnoise".
+			// Author:  Stefan Gustavson (stefan.gustavson@liu.se)
+			// Version: 2011-08-22
+			// Many thanks to Ian McEwan of Ashima Arts for the ideas for permutation and gradient selection.
+			//
+			// Copyright (c) 2011 Stefan Gustavson. All rights reserved. Distributed under the MIT license. See LICENSE file.
+			// https://github.com/ashima/webgl-noise
+			//
+			vec4 mod289(vec4 x) {//changes
+				return x - floor(x * (1.0 / 289.0)) * 289.0;
+			}
+			vec4 permute(vec4 x) {
+				return mod289(((x*34.0)+1.0)*x);
+			}
+			vec4 taylorInvSqrt(vec4 r) {
+				return 1.79284291400159 - 0.85373472095314 * r;
+			}
+			vec4 fade(vec4 t) {
+				return t*t*t*(t*(t*6.0-15.0)+10.0);
+			}
+			float cnoise(vec4 P) {// Classic Perlin noise
+				vec4 Pi0 = floor(P); // Integer part for indexing
+				vec4 Pi1 = Pi0 + 1.0; // Integer part + 1
+				Pi0 = mod289(Pi0);
+				Pi1 = mod289(Pi1);
+				vec4 Pf0 = fract(P); // Fractional part for interpolation
+				vec4 Pf1 = Pf0 - 1.0; // Fractional part - 1.0
+				vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+				vec4 iy = vec4(Pi0.yy, Pi1.yy);
+				vec4 iz0 = vec4(Pi0.zzzz);
+				vec4 iz1 = vec4(Pi1.zzzz);
+				vec4 iw0 = vec4(Pi0.wwww);
+				vec4 iw1 = vec4(Pi1.wwww);
+
+				vec4 ixy = permute(permute(ix) + iy);
+				vec4 ixy0 = permute(ixy + iz0);
+				vec4 ixy1 = permute(ixy + iz1);
+				vec4 ixy00 = permute(ixy0 + iw0);
+				vec4 ixy01 = permute(ixy0 + iw1);
+				vec4 ixy10 = permute(ixy1 + iw0);
+				vec4 ixy11 = permute(ixy1 + iw1);
+
+				vec4 gx00 = ixy00 * (1.0 / 7.0);
+				vec4 gy00 = floor(gx00) * (1.0 / 7.0);
+				vec4 gz00 = floor(gy00) * (1.0 / 6.0);
+				gx00 = fract(gx00) - 0.5;
+				gy00 = fract(gy00) - 0.5;
+				gz00 = fract(gz00) - 0.5;
+				vec4 gw00 = vec4(0.75) - abs(gx00) - abs(gy00) - abs(gz00);
+				vec4 sw00 = step(gw00, vec4(0.0));
+				gx00 -= sw00 * (step(0.0, gx00) - 0.5);
+				gy00 -= sw00 * (step(0.0, gy00) - 0.5);
+
+				vec4 gx01 = ixy01 * (1.0 / 7.0);
+				vec4 gy01 = floor(gx01) * (1.0 / 7.0);
+				vec4 gz01 = floor(gy01) * (1.0 / 6.0);
+				gx01 = fract(gx01) - 0.5;
+				gy01 = fract(gy01) - 0.5;
+				gz01 = fract(gz01) - 0.5;
+				vec4 gw01 = vec4(0.75) - abs(gx01) - abs(gy01) - abs(gz01);
+				vec4 sw01 = step(gw01, vec4(0.0));
+				gx01 -= sw01 * (step(0.0, gx01) - 0.5);
+				gy01 -= sw01 * (step(0.0, gy01) - 0.5);
+
+				vec4 gx10 = ixy10 * (1.0 / 7.0);
+				vec4 gy10 = floor(gx10) * (1.0 / 7.0);
+				vec4 gz10 = floor(gy10) * (1.0 / 6.0);
+				gx10 = fract(gx10) - 0.5;
+				gy10 = fract(gy10) - 0.5;
+				gz10 = fract(gz10) - 0.5;
+				vec4 gw10 = vec4(0.75) - abs(gx10) - abs(gy10) - abs(gz10);
+				vec4 sw10 = step(gw10, vec4(0.0));
+				gx10 -= sw10 * (step(0.0, gx10) - 0.5);
+				gy10 -= sw10 * (step(0.0, gy10) - 0.5);
+
+				vec4 gx11 = ixy11 * (1.0 / 7.0);
+				vec4 gy11 = floor(gx11) * (1.0 / 7.0);
+				vec4 gz11 = floor(gy11) * (1.0 / 6.0);
+				gx11 = fract(gx11) - 0.5;
+				gy11 = fract(gy11) - 0.5;
+				gz11 = fract(gz11) - 0.5;
+				vec4 gw11 = vec4(0.75) - abs(gx11) - abs(gy11) - abs(gz11);
+				vec4 sw11 = step(gw11, vec4(0.0));
+				gx11 -= sw11 * (step(0.0, gx11) - 0.5);
+				gy11 -= sw11 * (step(0.0, gy11) - 0.5);
+
+				vec4 g0000 = vec4(gx00.x,gy00.x,gz00.x,gw00.x);
+				vec4 g1000 = vec4(gx00.y,gy00.y,gz00.y,gw00.y);
+				vec4 g0100 = vec4(gx00.z,gy00.z,gz00.z,gw00.z);
+				vec4 g1100 = vec4(gx00.w,gy00.w,gz00.w,gw00.w);
+				vec4 g0010 = vec4(gx10.x,gy10.x,gz10.x,gw10.x);
+				vec4 g1010 = vec4(gx10.y,gy10.y,gz10.y,gw10.y);
+				vec4 g0110 = vec4(gx10.z,gy10.z,gz10.z,gw10.z);
+				vec4 g1110 = vec4(gx10.w,gy10.w,gz10.w,gw10.w);
+				vec4 g0001 = vec4(gx01.x,gy01.x,gz01.x,gw01.x);
+				vec4 g1001 = vec4(gx01.y,gy01.y,gz01.y,gw01.y);
+				vec4 g0101 = vec4(gx01.z,gy01.z,gz01.z,gw01.z);
+				vec4 g1101 = vec4(gx01.w,gy01.w,gz01.w,gw01.w);
+				vec4 g0011 = vec4(gx11.x,gy11.x,gz11.x,gw11.x);
+				vec4 g1011 = vec4(gx11.y,gy11.y,gz11.y,gw11.y);
+				vec4 g0111 = vec4(gx11.z,gy11.z,gz11.z,gw11.z);
+				vec4 g1111 = vec4(gx11.w,gy11.w,gz11.w,gw11.w);
+
+				vec4 norm00 = taylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
+				g0000 *= norm00.x;
+				g0100 *= norm00.y;
+				g1000 *= norm00.z;
+				g1100 *= norm00.w;
+
+				vec4 norm01 = taylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
+				g0001 *= norm01.x;
+				g0101 *= norm01.y;
+				g1001 *= norm01.z;
+				g1101 *= norm01.w;
+
+				vec4 norm10 = taylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
+				g0010 *= norm10.x;
+				g0110 *= norm10.y;
+				g1010 *= norm10.z;
+				g1110 *= norm10.w;
+
+				vec4 norm11 = taylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
+				g0011 *= norm11.x;
+				g0111 *= norm11.y;
+				g1011 *= norm11.z;
+				g1111 *= norm11.w;
+
+				float n0000 = dot(g0000, Pf0);
+				float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
+				float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
+				float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
+				float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
+				float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
+				float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
+				float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
+				float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
+				float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
+				float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
+				float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
+				float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
+				float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
+				float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
+				float n1111 = dot(g1111, Pf1);
+
+				vec4 fade_xyzw = fade(Pf0);
+				vec4 n_0w = mix(vec4(n0000, n1000, n0100, n1100), vec4(n0001, n1001, n0101, n1101), fade_xyzw.w);
+				vec4 n_1w = mix(vec4(n0010, n1010, n0110, n1110), vec4(n0011, n1011, n0111, n1111), fade_xyzw.w);
+				vec4 n_zw = mix(n_0w, n_1w, fade_xyzw.z);
+				vec2 n_yzw = mix(n_zw.xy, n_zw.zw, fade_xyzw.y);
+				float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
+				return 2.2 * n_xyzw;
+			}
+			mat4 rotationMatrix(vec3 axis, float angle) {
+				axis = normalize(axis);
+				float s = sin(angle);
+				float c = cos(angle);
+				float oc = 1.0 - c;
+				
+				return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+							oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+							oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+							0.0,                                0.0,                                0.0,                                1.0);
+			}
+			float NoiseT(vec3 loc, float scale, float timeScale) {
+				return (1.0 + cnoise(vec4(loc, T*timeScale) * scale)) * 0.5;
+			}
+			struct CircInfo {
+				vec4 coord;
+				vec2 uv;
+				float d;
+				float a;
+			};
+			CircInfo circle(vec2 uv, float ar, float r) {
+				vec2 d = vec2(0.5) - uv;
+				d.x *= ar;
+				d /= r * 0.5;
+				vec4 ret = vec4(0.0);
+				float l = length(d);
+				
+				float a = atan(d.y, d.x);
+
+				ret.x = - l * cos(a) / r;
+				ret.y = - l * sin(a) / r;
+				ret.z = sqrt(1.0 -(ret.x * ret.x + ret.y * ret.y));
+
+				return CircInfo(ret, d, l, a);
+			}
+			vec4 drawTexture(CircInfo point) {//changes (color)
+				float temp = NoiseT(point.coord.xyz, 4.0, 0.004) ;
+				temp = mix(temp, NoiseT(point.coord.xyz, 34.0, 0.008), 0.8);// temp = mix(temp, NoiseT(point.coord.xyz, 44.0, 0.005), 0.5);
+				temp = mix(temp, NoiseT(point.coord.xyz, 164.0, 0.01), 0.4);
+				float spots = NoiseT(point.coord.xyz, 4.0, 0.004);
+				float h = 0.75;
+				float c = 0.2;
+				if(darkspots && spots < c)		temp = mix(temp, 0.0, min(1.0, 2.0 * (c-spots)*(1.0/c)));
+				else if(brightspots && spots > h)	temp = temp * (1.0 + min(1.0, 2.0 * (spots-h)*(1.0/(1.0-h))));
+				temp = pow(temp, 2.0) ;
+				vec4 col = vec4(min(1.0, sqrt(temp) * 3.5), min(1.0, temp * 1.2), min(1.0, temp * 0.0), 1.0);
+// 				vec4 col = vec4(temp, temp, temp, 1.0);//gray	vec4(temp, 0.0, 0.0, 1.0);	vec4(0.0, temp, 0.0, 1.0);	vec4(0.0, 0.0, temp, 1.0);//
+// 				vec4 col = vec4(0.3, 0.3, 3.*temp, 1.0);//light blue	vec4(3.*temp, 0.3, 0.3, 1.0);//light red	vec4(10.*temp, 2.*temp, 0.3, 1.0);//light red
+				float w = 0.38;
+				if(temp > w)	col = mix(col, vec4(1.0),  (temp-w)*(1.0/(1.0-w))); 
+				return col;
+			}
+			
+			void main() {
+				float fuzzBegin = 0.999;
+				float fuzzWidth = 0.02;
+				fuzzBegin = radius * fuzzBegin;
+				float b = 0.997;
+				float ar = 3600. / 2400.;//vec2 uv = gl_FragCoord.xy / vec2(1200.,1200.);
+				vec2 uv = -1.0 + 2.0 * vUv;//vec2 uv = normalize( vNormal ).xy ;//sphere
+				CircInfo circ = circle(uv, ar, radius);
+				vec4 col = vec4(0.0);
+				if(circ.d <= radius) {
+					mat4 rot = rotationMatrix(vec3(0.3,0.9,-0.3), T * 0.03);//mat4 rot = rotationMatrix(vec3(0.1,0.0,0.0), T * 0.03);
+// 					circ.coord = rot * circ.coord;//movement
+					col = drawTexture(circ);
+				}
+				
+				gl_FragColor = col;
+			}			
+		</script>  
+		
+		<!--death-->
+		<!--white dwarf-->
+			<!--white dwarf (using vertexShader) -->
+		<script id="fragmentShaderWhiteDwarf" type="x-shader/x-fragment">//white dwarf					//materialWhiteDwarf							(OK)			(used)
+			varying vec2 vUv;
+			uniform float time;
+			uniform sampler2D texture1;
+
+			void main(void) {
+				float warpSpeed = 0.03;
+				float warpDistance = 0.02;
+				
+				vec2 uv = vUv.xy / vec2(1,1);
+				uv.x -= time* 0.0025;
+				uv.y *= -1.0;
+				
+				vec3 offTexX = texture2D(texture1, uv).rgb;
+				vec3 luma = vec3(0.299, 0.587, 0.114);
+				float power = dot(offTexX, luma);
+				power = sin(3.1415927*2.0 * mod(power + time * warpSpeed, 1.0));
+				
+				gl_FragColor = texture2D(texture1, uv+vec2(0, power)*warpDistance);
+			}
+		</script>				
+		<!--white dwarf and nebula -->
+			<!--nebula (using vertexShader) -->
+		<script id="fragmentShaderNebula" type="x-shader/x-fragment">//nebula	//rotation with touch			//shaderMaterialNebula							(OK)			(used)
+			varying vec2 vUv;
+			uniform float time;
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;//background
+			uniform vec2 resolution;
+			uniform float mouseX;
+// 			uniform float mouseY;
+			uniform float touchX;
+			uniform float touchY;
+			
+			//based on:
+			
+			// "Dusty nebula 4" by Duke
+			//-------------------------------------------------------------------------------------
+			// Based on "Dusty nebula 3" (https://www.shadertoy.com/view/lsVSRW) and "Protoplanetary disk" (https://www.shadertoy.com/view/MdtGRl) 
+			// otaviogood's "Alien Beacon" (https://www.shadertoy.com/view/ld2SzK) and Shane's "Cheap Cloud Flythrough" (https://www.shadertoy.com/view/Xsc3R4) shaders
+			// License: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License
+			
+			#define pi 3.14159265
+			#define R(p, a) p=cos(a)*p+sin(a)*vec2(p.y, -p.x)
+			float rand(vec2 co){
+				return fract(sin(dot(co*0.123,vec2(12.9898,78.233))) * 43758.5453);
+			}			
+			const float nudge = 0.739513;	// size of perpendicular vector
+			float normalizer = 1.0 / sqrt(1.0 + nudge*nudge);	// pythagorean theorem on that perpendicular to maintain scale
+			float SpiralNoiseC(vec3 p){//nudge
+				float n = 0.0;	// noise amount
+				float iter = 1.0;
+				for (int i = 0; i < 8; i++){
+					// add sin and cos scaled inverse with the frequency
+					n += -abs(sin(p.y*iter) + cos(p.x*iter)) / iter;	// abs for a ridged look
+					// rotate by adding perpendicular and scaling down
+					p.xy += vec2(p.y, -p.x) * nudge;
+					p.xy *= normalizer;
+					// rotate on other axis
+					p.xz += vec2(p.z, -p.x) * nudge;
+					p.xz *= normalizer;
+					// increase the frequency
+					iter *= 1.733733;
+				}
+				return n;
+			}
+			float SpiralNoise3D(vec3 p){//nudge
+				float n = 0.0;
+				float iter = 1.0;
+				for (int i = 0; i < 5; i++){
+					n += (sin(p.y*iter) + cos(p.x*iter)) / iter;
+					p.xz += vec2(p.z, -p.x) * nudge;
+					p.xz *= normalizer;
+					iter *= 1.33733;
+				}
+				return n;
+			}
+			float NebulaNoise(vec3 p){
+				float final = p.y + 4.5;
+				final -= SpiralNoiseC(p.xyz);   // mid-range noise
+				final += SpiralNoiseC(p.zxy*0.5123+100.0)*4.0;   // large scale features
+				final -= SpiralNoise3D(p);   // more large scale features, but 3d
+				return final;
+			}
+			
+			float map(vec3 p){
+// 				#ifdef ROTATION
+				R(p.xz, mouseX*0.008*pi);
+// 				#endif
+				
+				float NebNoise = abs(NebulaNoise(p/0.5)*0.5);
+				return NebNoise+0.03;
+			}
+			vec3 computeColor( float density, float radius ){// assign color to the media
+				// color based on density alone, gives impression of occlusion within the media
+				vec3 result = mix( vec3(0.0,0.1,0.8), vec3(0.6,0.1,0.9), density );
+				
+				// color added to the media
+				vec3 colCenter = 7.*vec3(0.8,1.0,1.0);
+				vec3 colEdge = 1.5*vec3(0.5,0.13,0.9);
+				result *= mix( colCenter, colEdge, min( (radius+.05)/.9, 1.15 ) );
+				return result;
+			}
+			bool RaySphereIntersect(vec3 org, vec3 dir, out float near, out float far){
+				float b = dot(dir, org);
+				float c = dot(org, org) - 8.;
+				float delta = b*b - c;
+				if( delta < 0.0) return false;
+				float deltasqrt = sqrt(delta);
+				near = -b - deltasqrt;
+				far = -b + deltasqrt;
+				return far > 0.0;
+			}
+			
+			vec4 RayTrace(vec3 ro, vec3 rd, vec2 seed){//lightColor and scattering changed
+				// ld, td: local, total density 
+				// w: weighting factor
+				float ld=0., td=0., w=0.;
+				// t: length of the ray
+				// d: distance function
+				float d=1., t=0.;
+				const float h = 0.1;
+				vec4 sum = vec4(0.0);
+				float min_dist=0.0, max_dist=0.0;			
+			
+				if(RaySphereIntersect(ro, rd, min_dist, max_dist)){
+					t = min_dist*step(t,min_dist);
+				
+					// raymarch loop
+					for (int i=0; i<156; i++){
+						vec3 pos = ro + t*rd;
+						// Loop break conditions.
+						if(td>0.9 || d<0.1*t || t>10. || sum.a > 0.99 || t>max_dist) break;
+						// evaluate distance function
+						float d = map(pos);
+						// change this string to control density 
+						d = max(d,0.08);
+						// point light calculations
+						vec3 ldst = vec3(0.0)-pos;
+						float lDist = max(length(ldst), 0.001);
+						// star in center
+						vec3 lightColor=vec3(1.0,0.3,0.1);//red
+						sum.rgb+=(lightColor/(lDist*lDist*1.)/30.); // star itself and bloom around the light
+						if (d<h){
+							// compute local density 
+							ld = h - d;
+							// compute weighting factor 
+							w = (1. - td) * ld;
+							// accumulate density
+							td += w + 1./200.;
+							vec4 col = vec4( computeColor(td,lDist), td );
+							// uniform scale density
+							col.a *= 0.185;
+							// colour by alpha
+							col.rgb *= col.a;
+							// alpha blend in contribution
+							sum = sum + col*(1.0 - sum.a);  
+						}
+						td += 1./70.;
+						// enforce minimum stepsize
+						d = max(d, 0.04); 
+// 						#ifdef DITHERING
+						// add in noise to reduce banding and create fuzz
+						d=abs(d)*(.8+0.2*rand(seed*vec2(i)));
+// 						#endif 
+						// trying to optimize step size near the camera and near the light source
+						t += max(d * 0.1 * max(min(length(ldst),length(ro)),1.0), 0.02);
+					}
+					
+					// simple scattering
+					sum *= 1. / exp( ld * 0.2 ) * 0.8;
+						
+					sum = clamp( sum, 0.0, 1.0 );
+					sum.xyz = sum.xyz*sum.xyz*(3.0-2.0*sum.xyz);
+				}
+				
+				return vec4(sum.x, sum.y, sum.z, td);
+			}//raytrace
+			
+			void main(void)	{  
+				vec2 pp = -1.0 + 2.0 * vUv;
+				pp.x *= (resolution.x)/resolution.y;			
+				vec2 seed = pp + fract(time);//dithering
+					
+				vec3 lookAt = vec3(0.0, 0.0, 0.0);	
+				float eyer = 8.0;//2.0
+				//if rotation is to work with a touch screen
+				float eyea = -(touchX / (resolution.x)) * 3.14 * 2.0;
+				float eyea2 = ((touchY / resolution.y)-0.21) * 3.14 * 2.0;
+				//ray origin
+				vec3 ro = vec3(eyer * cos(eyea) * sin(eyea2),eyer * cos(eyea2),eyer * sin(eyea) * sin(eyea2)); //camera position
+				//direction of the ray
+				vec3 front = normalize(lookAt - ro);
+				vec3 left = normalize(cross(normalize(vec3(0.0,1,-0.1)), front));
+				vec3 up = normalize(cross(front, left));
+				vec3 rd = normalize(front*1.5 + left*pp.x + up*pp.y); // rect vector //1.5 (size)			
+
+				vec4 sum = vec4(0.0);
+				sum.xyzw = RayTrace(ro, rd, seed);
+				
+				float td = sum.w;
+				sum.w = 0.0;
+				
+				//Milky Way image background
+				vec2 uv = vUv.xy / vec2(1,1);
+				vec4 background = texture2D( texture2, uv);
+				sum.xyz += background.xyz/3.; 
+					
+				gl_FragColor = vec4(sum.xyz,1.0);
+			}
+		</script>	
+		<!--neutron star and supernova remnant -->
+			<!--neutron (using vertexShader) -->
+		<script id="fragmentShaderNeutron" type="x-shader/x-fragment">//neutron	//rotation with touch			//shaderMaterialNeutron							(OK)			(used)
+			varying vec2 vUv;
+			uniform float time;
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+			uniform sampler2D texture3;
+			uniform vec2 resolution;
+			uniform float mouseX;
+// 			uniform float mouseY;
+			uniform float touchX;
+			uniform float touchY;			
+			
+			//"Supernova remnant" by Duke
+			//-------------------------------------------------------------------------------------
+			// Based on "Dusty nebula 4" (https://www.shadertoy.com/view/MsVXWW) and "Protoplanetary disk" (https://www.shadertoy.com/view/MdtGRl) 
+			// otaviogood's "Alien Beacon" (https://www.shadertoy.com/view/ld2SzK) and Shane's "Cheap Cloud Flythrough" (https://www.shadertoy.com/view/Xsc3R4) shaders
+			// License: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License
+			//-------------------------------------------------------------------------------------
+
+			#define DITHERING
+// 			#define TONEMAPPING
+			#define pi 3.14159265
+			#define R(p, a) p=cos(a)*p+sin(a)*vec2(p.y, -p.x)
+			float noise( in vec3 x ){// iq's noise
+				vec3 p = floor(x);
+				vec3 f = fract(x);
+				f = f*f*(3.0-2.0*f);
+				vec2 uv = (p.xy+vec2(37.0,17.0)*p.z) + f.xy;
+				vec2 rg = texture2D( texture1, (uv+ 0.5)/256.0, -100.0 ).yx;
+				return 1. - 0.82*mix( rg.x, rg.y, f.z );
+			}
+			float fbm(vec3 p){
+				return noise(p*.06125)*.5 + noise(p*.125)*.25 + noise(p*.25)*.125 + noise(p*.4)*.2;
+			}
+			float length2( vec2 p ){
+				return sqrt( p.x*p.x + p.y*p.y );
+			}
+			float length8( vec2 p ){
+				p = p*p; p = p*p; p = p*p;
+				return pow( p.x + p.y, 1.0/8.0 );
+			}
+			float Disk( vec3 p, vec3 t ){
+				vec2 q = vec2(length2(p.xy)-t.x,p.z*0.5);
+				return max(length8(q)-t.y, abs(p.z) - t.z);
+			}
+			const float nudge = 0.9;	// size of perpendicular vector
+			float normalizer = 1.0 / sqrt(1.0 + nudge*nudge);	// pythagorean theorem on that perpendicular to maintain scale
+			float SpiralNoiseC(vec3 p){
+				float n = 0.0;	// noise amount
+				float iter = 2.0;
+				for (int i = 0; i < 8; i++) {
+					// add sin and cos scaled inverse with the frequency
+					n += -abs(sin(p.y*iter) + cos(p.x*iter)) / iter;	// abs for a ridged look
+					// rotate by adding perpendicular and scaling down
+					p.xy += vec2(p.y, -p.x) * nudge;
+					p.xy *= normalizer;
+					// rotate on other axis
+					p.xz += vec2(p.z, -p.x) * nudge;
+					p.xz *= normalizer;
+					// increase the frequency
+					iter *= 1.733733;
+				}
+				return n;
+			}
+			float NebulaNoise(vec3 p){
+				float final = Disk(p.xzy,vec3(2.0,1.8,1.25));
+				final += fbm(p*90.);
+				final += SpiralNoiseC(p.zxy*0.5123+100.0)*3.0;
+				return final;
+			}
+			
+			float map(vec3 p){
+				R(p.xz, mouseX*0.008*pi);
+				float NebNoise = abs(NebulaNoise(p/0.5)*0.5);
+				return NebNoise+0.07;
+			}
+			vec3 computeColor( float density, float radius ){// assign color to the media
+				// color based on density alone, gives impression of occlusion within the media
+				vec3 result = mix( vec3(1.0,0.9,0.8), vec3(0.4,0.15,0.1), density );
+				
+				// color added to the media
+				vec3 colCenter = 7.*vec3(0.8,1.0,1.0);
+				vec3 colEdge = 1.5*vec3(0.48,0.53,0.5);
+				result *= mix( colCenter, colEdge, min( (radius+.05)/.9, 1.15 ) );
+				return result;
+			}
+			bool RaySphereIntersect(vec3 org, vec3 dir, out float near, out float far){
+				float b = dot(dir, org);
+				float c = dot(org, org) - 8.;
+				float delta = b*b - c;
+				if( delta < 0.0) return false;
+				float deltasqrt = sqrt(delta);
+				near = -b - deltasqrt;
+				far = -b + deltasqrt;
+				return far > 0.0;
+			}
+			vec3 ToneMapFilmicALU(vec3 _color){// Applies the filmic curve from John Hable's presentation. More details at : http://filmicgames.com/archives/75
+				_color = max(vec3(0), _color - vec3(0.004));
+				_color = (_color * (6.2*_color + vec3(0.5))) / (_color * (6.2 * _color + vec3(1.7)) + vec3(0.06));
+				return _color;
+			}
+
+			void main(void){  
+// 				// ro: ray origin
+// 				// rd: direction of the ray
+// 				vec3 rd = normalize(vec3((gl_FragCoord.xy-0.5*resolution.xy)/resolution.y, 1.));
+				
+				///////////////	replaced (ray origin + direction of the ray)
+				vec2 pp = -1.0 + 2.0 * vUv;
+				pp.x *= resolution.x/resolution.y;			
+				
+				vec3 lookAt = vec3(0.0, 0.0, 0.0);	
+				float eyer = 7.5;//9.0;//2.0
+				
+				//if rotation is to work with a touch screen
+				float eyea = -(touchX / resolution.x) * pi * 2.0;
+				float eyea2 = ((touchY / resolution.y)-0.21) * pi * 2.0;
+				
+				vec3 ro = vec3(eyer * cos(eyea) * sin(eyea2),eyer * cos(eyea2),eyer * sin(eyea) * sin(eyea2)); //camera position
+				
+				vec3 front = normalize(lookAt - ro);
+				vec3 left = normalize(cross(normalize(vec3(0.0,1,-0.1)), front));
+				vec3 up = normalize(cross(front, left));
+				vec3 rd = normalize(front*1.5 + left*pp.x + up*pp.y); // rect vector
+				/////////////////				
+				
+				float ld=0., td=0., w=0.;// ld, td: local, total density // w: weighting factor
+				float d=1., t=0.;// t: length of the ray	// d: distance function
+				const float h = 0.1;
+				vec4 sum = vec4(0.0);
+				float min_dist=0.0, max_dist=0.0;
+
+				if(RaySphereIntersect(ro, rd, min_dist, max_dist)){
+				t = min_dist*step(t,min_dist);
+			
+				// raymarch loop
+				for (int i=0; i<64; i++){//44
+					vec3 pos = ro + t*rd;
+					if(td>0.9 || d<0.1*t || t>10. || sum.a > 0.99 || t>max_dist) break;// Loop break conditions.
+					float d = map(pos);// evaluate distance function
+					d = max(d,0.0);// change this string to control density 
+					
+					// point light calculations
+					vec3 ldst = vec3(0.0)-pos;
+					float lDist = max(length(ldst), 0.001);
+
+					// the color of light 
+					vec3 lightColor=vec3(1.0,0.5,0.25);
+					
+					sum.rgb+=(vec3(0.67,0.75,1.00)/(lDist*lDist*10.)/80.); // star itself
+					sum.rgb+=(lightColor/exp(lDist*lDist*lDist*.08)/30.); // bloom
+					
+					if (d<h){
+						ld = h - d;// compute local density 
+						w = (1. - td) * ld;// compute weighting factor
+						td += w + 1./200.;// accumulate density
+						vec4 col = vec4( computeColor(td,lDist), td );
+// 						sum.rgb+=(vec3(0.0,0.0,0.01*td));
+						sum += sum.a * vec4(sum.rgb, 0.0) * 0.2;// emission
+						col.a *= 0.2;// uniform scale density
+						col.rgb *= col.a;// colour by alpha
+						sum = sum + col*(1.0 - sum.a); // alpha blend in contribution
+					}
+					td += 1./70.;
+
+					#ifdef DITHERING//idea from https://www.shadertoy.com/view/lsj3Dw
+					vec2 uv = gl_FragCoord.xy / resolution.xy;
+					uv.y*=120.;
+					uv.x*=280.;
+					d=abs(d)*(.8+0.08*texture2D(texture2,vec2(uv.y,-uv.x+0.5*sin(4.*time+uv.y*4.0))).r);
+					#endif 
+					
+					// trying to optimize step size near the camera and near the light source
+					t += max(d * 0.1 * max(min(length(ldst),length(ro)),1.0), 0.01);
+				}//loop
+				
+				// simple scattering
+				sum *= 1. / exp( ld * 0.2 ) * 0.6;
+				sum = clamp( sum, 0.0, 1.0 );
+				sum.xyz = sum.xyz*sum.xyz*(3.0-2.0*sum.xyz);
+				}
+			
+				//Milky Way image background
+				vec2 uv = vUv.xy / vec2(1,1);
+				vec4 background = texture2D( texture3, uv);
+				sum.xyz += background.xyz/3.; 
+				
+				#ifdef TONEMAPPING
+				gl_FragColor = vec4(ToneMapFilmicALU(sum.xyz*2.2),1.0);
+				#else
+				gl_FragColor = vec4(sum.xyz,1.0);
+				#endif
+			}
+		</script>	
+		<!--black hole and supernova remnant-->
+			<!--remnant + black hole (using vertexShader) -->
+		<script id="fragmentShaderNeutronHole" type="x-shader/x-fragment">//remnant + black hole //rotation with touch	//shaderMaterialNeutronHole						(OK)			(used)
+			varying vec2 vUv;
+			uniform float time;
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+			uniform sampler2D texture3;
+			uniform vec2 resolution;
+			uniform float mouseX;
+			//uniform float mouseY;
+			uniform float touchX;
+			uniform float touchY;			
+			
+			//"Supernova remnant" by Duke
+			//-------------------------------------------------------------------------------------
+			// Based on "Dusty nebula 4" (https://www.shadertoy.com/view/MsVXWW) and "Protoplanetary disk" (https://www.shadertoy.com/view/MdtGRl) 
+			// otaviogood's "Alien Beacon" (https://www.shadertoy.com/view/ld2SzK) and Shane's "Cheap Cloud Flythrough" (https://www.shadertoy.com/view/Xsc3R4) shaders
+			// License: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License
+
+			#define DITHERING
+// 			#define TONEMAPPING
+			#define pi 3.14159265
+			#define R(p, a) p=cos(a)*p+sin(a)*vec2(p.y, -p.x)
+			float noise( in vec3 x ){// iq's noise
+				vec3 p = floor(x);
+				vec3 f = fract(x);
+				f = f*f*(3.0-2.0*f);
+				vec2 uv = (p.xy+vec2(37.0,17.0)*p.z) + f.xy;
+				vec2 rg = texture2D( texture1, (uv+ 0.5)/256.0, -100.0 ).yx;
+				return 1. - 0.82*mix( rg.x, rg.y, f.z );
+			}
+			float fbm(vec3 p){
+				return noise(p*.06125)*.5 + noise(p*.125)*.25 + noise(p*.25)*.125 + noise(p*.4)*.2;
+			}
+			float length2( vec2 p ){
+				return sqrt( p.x*p.x + p.y*p.y );
+			}
+			float length8( vec2 p ){
+				p = p*p; p = p*p; p = p*p;
+				return pow( p.x + p.y, 1.0/8.0 );
+			}
+			float Disk( vec3 p, vec3 t ){
+				vec2 q = vec2(length2(p.xy)-t.x,p.z*0.5);
+				return max(length8(q)-t.y, abs(p.z) - t.z);
+			}
+			const float nudge = 0.9;	// size of perpendicular vector
+			float normalizer = 1.0 / sqrt(1.0 + nudge*nudge);	// pythagorean theorem on that perpendicular to maintain scale
+			float SpiralNoiseC(vec3 p){
+				float n = 0.0;	// noise amount
+				float iter = 2.0;
+				for (int i = 0; i < 8; i++){
+					// add sin and cos scaled inverse with the frequency
+					n += -abs(sin(p.y*iter) + cos(p.x*iter)) / iter;	// abs for a ridged look
+					// rotate by adding perpendicular and scaling down
+					p.xy += vec2(p.y, -p.x) * nudge;
+					p.xy *= normalizer;
+					// rotate on other axis
+					p.xz += vec2(p.z, -p.x) * nudge;
+					p.xz *= normalizer;
+					// increase the frequency
+					iter *= 1.733733;
+				}
+				return n;
+			}
+			float NebulaNoise(vec3 p){
+				float final = Disk(p.xzy,vec3(2.0,1.8,1.25));
+				final += fbm(p*90.);
+				final += SpiralNoiseC(p.zxy*0.5123+100.0)*3.0;
+				return final;
+			}
+			
+			float map(vec3 p){
+				R(p.xz, mouseX*0.008*pi);
+				float NebNoise = abs(NebulaNoise(p/0.5)*0.5);
+				return NebNoise+0.07;
+			}
+			vec3 computeColor( float density, float radius ){// assign color to the media
+				// color based on density alone, gives impression of occlusion within the media
+				vec3 result = mix( vec3(1.0,0.9,0.8), vec3(0.4,0.15,0.1), density );
+				
+				// color added to the media
+				vec3 colCenter = 7.*vec3(0.8,1.0,1.0);
+				vec3 colEdge = 1.5*vec3(0.48,0.53,0.5);
+				result *= mix( colCenter, colEdge, min( (radius+.05)/.9, 1.15 ) );
+				return result;
+			}
+			bool RaySphereIntersect(vec3 org, vec3 dir, out float near, out float far){
+				float b = dot(dir, org);
+				float c = dot(org, org) - 8.;
+				float delta = b*b - c;
+				if( delta < 0.0) return false;
+				float deltasqrt = sqrt(delta);
+				near = -b - deltasqrt;
+				far = -b + deltasqrt;
+				return far > 0.0;
+			}
+			vec3 ToneMapFilmicALU(vec3 _color){// Applies the filmic curve from John Hable's presentation. More details at : http://filmicgames.com/archives/75
+				_color = max(vec3(0), _color - vec3(0.004));
+				_color = (_color * (6.2*_color + vec3(0.5))) / (_color * (6.2 * _color + vec3(1.7)) + vec3(0.06));
+				return _color;
+			}
+			
+			//black hole
+			float sdSphere( vec3 p, float s ){
+				return length(p)-s;
+			}
+			float sdTorus( vec3 p, vec2 t ){
+				vec2 q = vec2(length(p.xz)-t.x,p.y);
+				return length(q)-t.y;
+			}
+			
+			void main(void){  
+// 				// ro: ray origin
+// 				// rd: direction of the ray
+// 				vec3 rd = normalize(vec3((gl_FragCoord.xy-0.5*resolution.xy)/resolution.y, 1.));
+
+				///////////////	replaced (ray origin + direction of the ray)
+				vec2 pp = -1.0 + 2.0 * vUv;
+				pp.x *= resolution.x/resolution.y;			
+				
+				vec3 lookAt = vec3(0.0, 0.0, 0.0);	
+				
+				float eyer = 3.0;//9.0;//2.0
+				
+				//if rotation is to work with a touch screen
+				float eyea = -(touchX / resolution.x) * pi * 2.0;
+				float eyea2 = ((touchY / resolution.y)-0.21) * pi * 2.0;
+				
+				vec3 ro = vec3(eyer * cos(eyea) * sin(eyea2),eyer * cos(eyea2),eyer * sin(eyea) * sin(eyea2)); //camera position
+
+				vec3 front = normalize(lookAt - ro);
+				vec3 left = normalize(cross(normalize(vec3(0.0,1,-0.1)), front));
+				vec3 up = normalize(cross(front, left));
+				vec3 rd = normalize(front*0.5 + left*pp.x + up*pp.y); // rect vector
+				/////////////////				
+				
+				////////////// remnant ////////////////
+				float ld=0., td=0., w=0.;// ld, td: local, total density // w: weighting factor
+				float d=1., t=0.;// t: length of the ray	// d: distance function
+				const float h = 0.1;
+				vec4 sum = vec4(0.0);
+				float min_dist=0.0, max_dist=0.0;
+
+				if(RaySphereIntersect(ro, rd, min_dist, max_dist)){
+				t = min_dist*step(t,min_dist);
+			
+				// raymarch loop
+				for (int i=0; i<64; i++){//44 
+					vec3 pos = ro + t*rd;
+					if(td>0.9 || d<0.1*t || t>10. || sum.a > 0.99 || t>max_dist) break;// Loop break conditions.
+					float d = map(pos);// evaluate distance function
+					d = max(d,0.0);// change this string to control density 
+					
+					// point light calculations
+					vec3 ldst = vec3(0.0)-pos;
+					float lDist = max(length(ldst), 0.001);
+
+					// the color of light 
+					vec3 lightColor=vec3(0.6,0.25,0.89);//purple 2
+
+					sum.rgb+=(lightColor/exp(lDist*lDist*lDist*.08)/30.); // bloom
+					
+					if (d<h){
+						ld = h - d;// compute local density 
+						w = (1. - td) * ld;// compute weighting factor 
+						td += w + 1./200.;// accumulate density
+						vec4 col = vec4( computeColor(td,lDist), td );
+						sum += sum.a * vec4(sum.rgb, 0.0) * 0.2;// emission	
+						col.a *= 0.2;// uniform scale density
+						col.rgb *= col.a;// colour by alpha
+						sum = sum + col*(1.0 - sum.a); // alpha blend in contribution
+					}
+					td += 1./70.;
+
+					#ifdef DITHERING
+					//idea from https://www.shadertoy.com/view/lsj3Dw
+					vec2 uv = gl_FragCoord.xy / resolution.xy;
+					uv.y*=120.;
+					uv.x*=280.;
+					d=abs(d)*(.8+0.08*texture2D(texture2,vec2(uv.y,-uv.x+0.5*sin(4.*time+uv.y*4.0))).r);
+					#endif 
+					
+					// trying to optimize step size near the camera and near the light source
+					t += max(d * 0.1 * max(min(length(ldst),length(ro)),1.0), 0.01);
+				}
+				
+				// simple scattering
+				sum *= 1. / exp( ld * 0.2 ) * 0.6;
+				sum = clamp( sum, 0.0, 1.0 );
+				sum.xyz = sum.xyz*sum.xyz*(3.0-2.0*sum.xyz);
+				}
+				
+				//Milky Way image background
+				vec2 uv = vUv.xy / vec2(1,1);
+				vec4 background = texture2D( texture3, uv);
+				sum.xyz += background.xyz/3.; 
+				
+				#ifdef TONEMAPPING
+				gl_FragColor = vec4(ToneMapFilmicALU(sum.xyz*2.2),1.0);
+				#else
+				gl_FragColor = vec4(sum.xyz,1.0);
+				#endif				
+				///////////////////////////////////////
+
+				////////////// black hole ////////////////
+				vec3 bh = vec3(0.0,0.0,0.0);
+				float bhr = 0.1;
+				float bhmass = 0.5;//5.0;//0.1;
+				bhmass *= 0.001; // premul G
+				vec3 p = ro;
+				vec3 pv = rd;
+				float dt = 0.02;
+				vec3 col = vec3(0.0);
+				float noncaptured = 1.0;
+				vec3 c1 = vec3(0.5,0.35,0.1);//colors
+				vec3 c2 = vec3(1.0,0.8,0.6);
+				
+				//black hole - set center to black
+				if(sqrt(pp.x*pp.x+ pp.y*pp.y) < 0.0255){//these values are for eyer factor 3.0, 0.0255, 0.0275 leaves a nice "edge"
+					gl_FragColor = vec4(-1.0,-1.0,-1.0,1.0);
+				}
+				
+				//black hole
+				for(float t=0.0;t<1.0;t+=0.005){
+					p = p + pv * dt * 2.*noncaptured;
+					
+					//gravity
+					vec3 bhv = bh - p;
+					float r = dot(bhv,bhv);
+					pv += normalize(bhv) * ((bhmass) / r);
+					
+					noncaptured = smoothstep(0.0, 0.166, sdSphere(p-bh,bhr));
+					
+					// Texture for the accretion disc
+					float dr = length(bhv.xz);
+					float da = atan(bhv.x,bhv.z);
+					vec2 ra = vec2(dr,da * (0.01 + (dr - bhr)*0.002) + 2.0 * pi + time *0.005);
+					ra *= vec2(1.0,2.0);//10,20
+					
+					vec3 dcol = mix(c2,c1,pow(length(bhv)-bhr,2.0)) * max(0.0,texture2D(texture2,ra*vec2(0.1,0.5)).r+0.05) * (4.0 / ((0.001+(length(bhv) - bhr)*20.0) ));
+					col += max(vec3(0.0),dcol * smoothstep(0.0, 1.0, -sdTorus( (p * vec3(1.0,25.0,1.0)) - bh, vec2(0.1,0.99))) * noncaptured);
+
+					// Glow
+					col += vec3(0.3,0.2,0.1) * (0.1/vec3(dot(bhv,bhv))) * 0.0443 * noncaptured;
+				}
+				col += pow(texture2D(texture1,pv.xy).rgb,vec3(10.5));//works
+				
+				gl_FragColor += vec4(col,1.0);				
+			}
+		</script>	
+				
+		
+		<script>//jquery GUI (#arrowBig, mass radio buttons, time radio buttons, main dialog)
+		$(function(){
+			$("#menu_time").hide();
+			
+			{//arrow (jquery just image)
+				$("#arrowBig")//arrow
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":button_opacity, 
+					"position":"absolute", "bottom":big_arrow_bottom, "right":big_arrow_left
+					}) // adds CSS
+				.append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_default+"/>");//plasma
+			}
+
+			{//mass arrow radio buttons
+					$( "#radioMass" ).buttonset();
+					$('#radioMass input').on('change', function() {
+						var radioID = $('input[name="radioMassOptions"]:checked')[0].id;
+	// 					console.log(radioID);
+						
+						var radioIDtime = $('input[name="radioTimeOptions"]:checked')[0].id;
+
+						//close all dialogs
+						$(".ui-dialog-content").dialog("close");//close all dialogs
+						
+						//show time menu
+						$("#menu_time").show();
+
+						OnIgnite = true;//not needed for "Red" 
+	
+						//make sure all radio buttons are visible
+						//hidden in Orange PMS, Red PMS
+						$('label[for="starButtonPMS"]').show();
+						//hidden in Red Death
+						$('label[for="starButtonDeath"]').show();
+						
+						if(radioID == "starButtonBlue") {
+// 							console.log("Blue");
+							
+							if(getUrlVars()["lang"] == "en") {
+								//set the time arrow image
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_blue+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_blue_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_blue);
+							}
+							if(getUrlVars()["lang"] == "de") {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_blue_DE+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_blue_death_DE+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_blue_DE);
+							}
+							if(!getUrlVars()["lang"]) {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_blue+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_blue_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_blue);
+							}
+
+							//set the time buttons
+							$('div[id="radioTime"] label[for="starButtonProto"]').html('<img src="'+icon_time_blue_proto+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_blue_main+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							$('div[id="radioTime"] label[for="starButtonPMS"]').html('<img src="'+icon_time_blue_post+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							//depends on the language (see above)
+// 							$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_blue_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"	
+							
+							ProtoStar(ProtoParticleSize_blue, 2);//ProtoColor_blue
+							
+							//set the time radio option to protostar
+							$('#starButtonProto').trigger('click');//check the proto
+						}
+						if(radioID == "starButtonWhite") {
+// 							console.log("White");
+
+							if(getUrlVars()["lang"] == "en") {
+								//set the time arrow image
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_white+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_white_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_white);
+							}
+							if(getUrlVars()["lang"] == "de") {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_white_DE+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_white_death_DE+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_white_DE);
+							}
+							if(!getUrlVars()["lang"]) {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_white+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_white_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_white);
+							}							
+							
+							//set the time buttons
+							$('div[id="radioTime"] label[for="starButtonProto"]').html('<img src="'+icon_time_white_proto+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_white_main+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							$('div[id="radioTime"] label[for="starButtonPMS"]').html('<img src="'+icon_time_white_post+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							//depends on the language (see above)
+// 							$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_white_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"								
+							
+							ProtoStar(ProtoParticleSize_white, 2);//ProtoColor_white
+							
+							//set the time radio option to protostar
+							$('#starButtonProto').trigger('click');//check the proto
+						}
+						if(radioID == "starButtonYellow") {
+// 							console.log("Yellow");
+
+							if(getUrlVars()["lang"] == "en") {
+								//set the time arrow image
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_yellow+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_yellow_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_yellow);
+							}
+							if(getUrlVars()["lang"] == "de") {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_yellow_DE+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_yellow_death_DE+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_yellow_DE);
+							}
+							if(!getUrlVars()["lang"]) {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_yellow+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_yellow_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_yellow);
+							}	
+							
+							//set the time buttons
+							$('div[id="radioTime"] label[for="starButtonProto"]').html('<img src="'+icon_time_yellow_proto+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_yellow_main+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							$('div[id="radioTime"] label[for="starButtonPMS"]').html('<img src="'+icon_time_yellow_post+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							//depends on the language (see above)
+// 							$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_yellow_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"	
+							
+							ProtoStar(ProtoParticleSize_yellow, 2);//ProtoColor_yellow
+							
+							//set the time radio option to protostar
+							$('#starButtonProto').trigger('click');//check the proto
+						}
+						if(radioID == "starButtonOrange") {
+// 							console.log("Orange");
+
+							if(getUrlVars()["lang"] == "en") {
+								//set the time arrow image
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_red+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_red_main+'"  height="'+time_arrow_radio_button_height+'px" ></img>');
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_red_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_orange);
+							}
+							if(getUrlVars()["lang"] == "de") {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_red_DE+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_red_main_DE+'"  height="'+time_arrow_radio_button_height+'px" ></img>');
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_red_death_DE+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');	
+								AddDialog("#dialogMain", protostar_orange_DE);
+							}
+							if(!getUrlVars()["lang"]) {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_red+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_red_main+'"  height="'+time_arrow_radio_button_height+'px" ></img>');
+								$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_red_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');
+								AddDialog("#dialogMain", protostar_orange);
+							}	
+							
+							//set the time buttons
+							$('div[id="radioTime"] label[for="starButtonProto"]').html('<img src="'+icon_time_red_proto+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							//depends on the language (see above)
+// 							$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_red_main+'"  height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// // 							$('div[id="radioTime"] label[for="starButtonPMS"]').html('<img src="'+icon_time_white_post+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// 							$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_red_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							
+							ProtoStar(ProtoParticleSize_orange, 2);//ProtoColor_orange
+							
+							//set the time radio option to protostar
+							$('#starButtonProto').trigger('click');//check the proto
+							
+							{//hide unused radio buttons (PMS)
+							$('label[for="starButtonPMS"]').hide();//the label need to be hidden
+							}
+						}
+						if(radioID == "starButtonRed") {
+// 							console.log("Red");
+
+							if(getUrlVars()["lang"] == "en") {
+								//set the time arrow image
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_brown+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_brown_main+'" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+								AddDialog("#dialogMain", protostar_red);
+							}
+							if(getUrlVars()["lang"] == "de") {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_brown_DE+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_brown_main_DE+'" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+								AddDialog("#dialogMain", protostar_red_DE);
+							}
+							if(!getUrlVars()["lang"]) {
+								$("#arrowBig").text("").append("<img id='BA' width="+big_arrow_width+" height="+big_arrow_height+" src="+time_arrow_brown+"/>");//arrow_blue//arrow_yellow//arrow_red
+								$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_brown_main+'" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+								AddDialog("#dialogMain", protostar_red);
+							}								
+							
+							//set the time buttons
+							$('div[id="radioTime"] label[for="starButtonProto"]').html('<img src="'+icon_time_brown_proto+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							//depends on the language (see above)
+// 							$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_brown_main+'" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// // 							$('div[id="radioTime"] label[for="starButtonPMS"]').html('<img src="'+icon_time_yellow_post+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// // 							$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_yellow_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+							
+							ProtoStar(ProtoParticleSize_red, 2);//ProtoColor_red
+							
+							//set the time radio option to protostar
+							$('#starButtonProto').trigger('click');//check the proto
+
+							{//hide unused radio buttons (PMS, Death)
+							$('label[for="starButtonPMS"]').hide();//the label need to be hidden
+							$('label[for="starButtonDeath"]').hide();//the label need to be hidden
+							}	
+						}							
+					});					
+			}
+	
+			{//time arrow radio buttons
+					$( "#radioTime" ).buttonset();
+					$('#radioTime input').on('change', function() {
+						var radioID = $('input[name="radioTimeOptions"]:checked')[0].id;
+						var radioIDMass = $('input[name="radioMassOptions"]:checked')[0].id;
+						
+						if(radioID == "starButtonProto") {
+// 							console.log("Proto Star");
+							
+// 							//set the HR mark position
+// 							HRGraphMark(HRmark_scale_proto, HRmark_x_proto, HRmark_y_proto);//protostar
+							
+							if(radioIDMass == "starButtonBlue"){
+								ProtoStar(ProtoParticleSize_blue, 2);//ProtoColor_blue
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", protostar_blue);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", protostar_blue_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", protostar_blue);}
+							}
+							if(radioIDMass == "starButtonWhite"){
+								ProtoStar(ProtoParticleSize_white, 2);//ProtoColor_white
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", protostar_white);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", protostar_white_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", protostar_white);}
+							}
+							if(radioIDMass == "starButtonYellow"){
+								ProtoStar(ProtoParticleSize_yellow, 2);//ProtoColor_yellow
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", protostar_yellow);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", protostar_yellow_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", protostar_yellow);}
+							}
+							if(radioIDMass == "starButtonOrange"){
+								ProtoStar(ProtoParticleSize_orange, 2);//ProtoColor_orange
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", protostar_orange);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", protostar_orange_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", protostar_orange);}	
+							}
+							if(radioIDMass == "starButtonRed"){
+								ProtoStar(ProtoParticleSize_red, 2);//ProtoColor_red
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", protostar_red);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", protostar_red_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", protostar_red);}	
+							}
+						}
+						if(radioID == "starButtonMS") {
+// 							console.log("Main Sequence");
+							
+							if(radioIDMass == "starButtonBlue"){
+								MainSequence(scaleIn_blue, textureIn_blue, colorIn_blue, fovIn_blue, texture_sprite2_blue);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", main_blue);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", main_blue_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", main_blue);}								
+							}
+							if(radioIDMass == "starButtonWhite"){
+								MainSequence(scaleIn_white, textureIn_white, colorIn_white, fovIn_white, texture_sprite2_white);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", main_white);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", main_white_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", main_white);}								
+							}
+							if(radioIDMass == "starButtonYellow"){
+								MainSequence(scaleIn_yellow, textureIn_yellow, colorIn_yellow, fovIn_yellow, texture_sprite2_yellow);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", main_yellow);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", main_yellow_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", main_yellow);}								
+							}
+							if(radioIDMass == "starButtonOrange"){
+								MainSequence(scaleIn_orange, textureIn_orange, colorIn_orange, fovIn_orange, texture_sprite2_orange);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", main_orange);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", main_orange_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", main_orange);}								
+							}
+							if(radioIDMass == "starButtonRed"){
+								BrownDwarf();
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", main_red);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", main_red_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", main_red);}								
+							}	
+						}
+						if(radioID == "starButtonPMS") {
+// 							console.log("Post Main Sequence");
+							
+							if(radioIDMass == "starButtonBlue"){
+								MainSequence(scaleIn_PMS_blue, textureIn_PMS_blue, colorIn_PMS_blue, fovIn_PMS_blue, texture_sprite2_postblue);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", post_blue);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", post_blue_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", post_blue);}			
+							}
+							if(radioIDMass == "starButtonWhite"){
+								MainSequence(scaleIn_PMS_white, textureIn_PMS_white, colorIn_PMS_white, fovIn_PMS_white, texture_sprite2_postwhite);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", post_white);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", post_white_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", post_white);}		
+							}
+							if(radioIDMass == "starButtonYellow"){
+								MainSequence(scaleIn_PMS_yellow, textureIn_PMS_yellow, colorIn_PMS_yellow, fovIn_PMS_yellow, texture_sprite2_postyellow);
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", post_yellow);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", post_yellow_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", post_yellow);}		
+							}
+// 							if(radioIDMass == "starButtonOrange"){}
+// 							if(radioIDMass == "starButtonRed"){}	
+						}
+						if(radioID == "starButtonDeath") {
+// 							console.log("Death");
+							
+							if(radioIDMass == "starButtonBlue"){
+								RemnantHole();//black hole and supernova remnant
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", death_blue);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", death_blue_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", death_blue);}		
+							}
+							if(radioIDMass == "starButtonWhite"){
+								NeutronStar();//neutron star and supernova remnant
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", death_white);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", death_white_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", death_white);}								
+							}
+							if(radioIDMass == "starButtonYellow"){
+								Nebula();//white dwarf and nebula
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", death_yellow);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", death_yellow_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", death_yellow);}
+							}
+							if(radioIDMass == "starButtonOrange"){
+								WhiteDwarf();//white dwarf
+								if(getUrlVars()["lang"] == "en") {AddDialog("#dialogMain", death_orange);}
+								if(getUrlVars()["lang"] == "de") {AddDialog("#dialogMain", death_orange_DE);}
+								if(!getUrlVars()["lang"]) {AddDialog("#dialogMain", death_orange);}								
+							}
+// 							if(radioIDMass == "starButtonRed"){}	
+						}
+					});
+			}
+			
+			{//dialog
+				//add: CSS class, div element, jquery stuff (here), open the dialog within some function
+				$("#dialogMain").dialog({
+					autoOpen: false,
+					modal: false,
+					dialogClass: "dlg-no-title",
+					resizable: false,
+					height: dialog_height,
+					width: dialog_width,
+ 					position: [dialog_left,dialog_up],//left, top
+					clickOutside: false, // clicking outside the dialog will close it
+					clickOutsideTrigger: ".dialogRadioClass"  // Element (id or class) that triggers the dialog opening 
+				});
+			}
+		});
+		</script>
+		
+		<script>//functions 
+			{//functions for Stars (ProtoStar, MainSequence, BrownDwarf, WhiteDwarf, Nebula, NeutronStar, RemnantHole)
+				function SpreadPlaneToScreen(){//to spread the plane with a 2D shader across the entire screen
+						//setting the plane to "cover" the screen
+						views[0].camera.position.x = 0;
+						views[0].camera.position.y = 0;
+// 						views[0].camera.position.z = window.innerWidth/3.;//get this automatically
+						
+						vFOV0 = views[0].camera.fov * Math.PI / 180;        // convert vertical fov to radians
+						dist = window.innerHeight/(2. * Math.tan( vFOV0 / 2. ));
+// 						var aspect = window.innerWidth / window.innerHeight;
+// 						var dist = (window.innerWidth/aspect) /(2. * Math.tan( vFOV / 2. ));
+// //						var height = 2 * Math.tan( vFOV / 2 ) * dist; // visible height
+// //						var aspect = window.width / window.height;
+// //						var width = height * aspect;                  // visible width
+						views[0].camera.position.z = 1.0*dist;//get this automatically
+						
+// 						console.log(views[0].camera.position.z);
+						views[0].camera.lookAt(new THREE.Vector3(0,0,0));
+						views[0].camera.up.set( 0, 1, 0 );
+				}
+				function ClearObjects(){
+								{//protostar
+								scene.remove(spiral);//1-body particles
+								scene.remove(spiral2);
+								scene.remove(spiral3);
+								scene2.remove(galaxy1);
+								if(particleGroup3) scene2.remove( particleGroup3.mesh );//fire particles (up, down, side)
+								}								
+								
+								{//star
+								scene.remove(sprite);
+								scene.remove(sprite2);
+								scene2.remove(sprite3);
+								scene.remove(sprite4);
+								scene.remove(center);
+								}
+								
+								{//nebula + neutron star + supernova remnant and black hole
+								scene.remove(quad4);//nebula + neutron star + supernova remnant and black hole
+								}
+								
+								{//brown dwarf
+// 								if(SphereDwarf){
+									scene.remove(SphereDwarf);
+									scene.remove(SphereDwarf2);
+// 								}
+								}
+						
+								{//white dwarf
+									scene.remove(SphereWhiteDwarf);
+								}
+								
+								controls.enabled = true;
+				}
+			
+				///////////////////////////////////
+				function ProtoStar(scale, color){//fovIn set by calling MainSequence already 		(color not doing anything anymore)
+								ClearObjects();
+								{//protostar (main)
+								{//spiral, spiral2, spiral3, galaxy
+								if(spiral){
+								{//first protostar ring
+								particleSize = attributes3.variableSize.value;
+								particleColor = attributes3.variableColor.value;
+								for( var i = 0; i < numParticles; i++ ){
+									particleSize[i] = scale +  scale * 800. * Math.random();
+									particleColor[i] = new THREE.Color();
+									particleColor[i].setRGB(1.0,Math.random()-0.1,0.1);//dustish
+// 									if(color==1) particleColor[i].setRGB(Math.random(),Math.random(),1.0);//blue
+// // 									if(color==2) particleColor[i].setRGB(1.0,Math.random(),0.6 + Math.random());//purpleish
+// 									if(color==3) particleColor[i].setRGB(2.0, 0.1 + Math.random(),0.3 + Math.random());//magentish
+// 									if(color==2) particleColor[i].setRGB(1.0,Math.random()-0.1,0.1);//dustish
+								}					
+								InitPositionsPointCloud(spiral, verticesSpiral, i1, o1);//values into verticesSpiral (spiral.geometry.vertices)
+								spiral.scale.set(scale*1.05/1., scale*1.05/1., scale*1.05/1.);
+								scene.add(spiral);
+								}
+								{//second protostar ring
+								particleSize2 = attributes5.variableSize.value;
+								particleColor2 = attributes5.variableColor.value;
+								for( var i = 0; i < numParticles; i++ ){
+									particleSize2[i] = scale +  scale * 1600. * Math.random();
+									particleColor2[i] = new THREE.Color();
+									particleColor2[i].setRGB(1.2,Math.random()-0.5,0.2);
+// 									if(color==1) particleColor2[i].setRGB(Math.random(),Math.random(),1.5);//blue
+								}
+								InitPositionsPointCloud(spiral2, verticesSpiral2, i2, o2);//values into verticesSpiral2 (spiral2.geometry.vertices)
+								spiral2.scale.set(scale, scale, scale);
+								scene.add( spiral2 );
+								}
+								{//third protostar ring
+								particleSize3 = attributes6.variableSize.value;
+								particleColor3 = attributes6.variableColor.value;
+								for( var i = 0; i < numParticles; i++ ){
+									particleSize3[i] = scale +  scale * 6600. * Math.random();
+									particleColor3[i] = new THREE.Color();
+									particleColor3[i].setRGB(1.0,Math.random()-0.5,0.2);
+// 									if(color==1) particleColor3[i].setRGB(Math.random(),Math.random(),2.0);//blue
+								}								
+								InitPositionsPointCloud(spiral3, verticesSpiral3, i3, o3);//values into verticesSpiral3 (spiral3.geometry.vertices)
+								spiral3.scale.set(scale, scale, scale);
+								scene.add( spiral3 );
+								}
+								{//galaxy
+								galaxySize = attributesGalaxy.variableSize.value;
+// 								galaxyColor = attributesGalaxy.variableColor.value;
+								for ( i = 0; i < numStars1; ++i ){
+									galaxySize[i] = scale +  scale * 1000. * Math.random();//95//195
+								}
+								attributesGalaxy.variableSize.needsUpdate = true;
+								galaxy1.scale.set(scale, scale, scale);//not scale of the particles
+								scene2.add(galaxy1);
+								}
+								}//if spiral
+								}
+								
+								{//fire - if the scale is similar - no need for reinitializaton
+								if(particleGroup3) particleGroup3.mesh.scale.set((scale)/1., (scale)/1., (scale)/1.);
+								if(particleGroup3) scene2.add( particleGroup3.mesh );//fire particles (up, down, side)
+								}//fire
+								
+								{//protostar rotation
+								var proto_rotation = 45*Math.PI/180;
+								if(spiral) spiral.rotation.x = proto_rotation;//ring 1 (inner)
+								if(spiral2) spiral2.rotation.x = proto_rotation;//ring 2
+								if(spiral3) spiral3.rotation.x = proto_rotation;//ring 3 (outer)
+								if(galaxy1) galaxy1.rotation.x = proto_rotation + 90*Math.PI/180;//spiral galaxy
+								if(particleGroup3) particleGroup3.mesh.rotation.x = proto_rotation;//fire
+								}
+								}
+				}
+				function MainSequence(scaleIn, textureIn, colorIn, fovIn, spriteTextureIn){
+						ClearObjects();
+						{//star (main)
+						scene.add(center);	
+						
+						var scale = scaleIn;
+					
+// 						//texture, color					
+						materialSun.uniforms.texture2.value = textureIn;
+						materialSun.uniforms.texture2.value.wrapS = materialSun.uniforms.texture2.value.wrapT = THREE.RepeatWrapping;//must be here (otherwise the texture floats away)
+
+						//size
+						center.scale.set(scale*1.0,scale*1.0,scale*1.0);
+						window.size_Sun = scale * init_size_Sun;
+
+						if(OnIgnite){
+							scene.add(sprite);
+							scene.add(sprite2);
+			// 				scene.add(sprite3);
+							scene2.add(sprite3);
+							scene.add(sprite4);
+							
+							//sprite textures
+							//texture_sprite2_blue, texture_sprite2_white, texture_sprite2_yellow, texture_sprite2_orange
+							//texture_sprite2_postblue, texture_sprite2_postwhite, texture_sprite2_postyellow
+							sprite2.material.map = spriteTextureIn;
+							sprite3.material.map = spriteTextureIn;
+							sprite4.material.map = spriteTextureIn;	
+							
+							sprite.material.color.setHex (colorIn);//(0xcc0033);//red
+							sprite3.material.color.setHex (colorIn);//(0xcc0033);//red	
+
+							sprite.scale.x = window.size_Sun*1.0*4.5;
+							sprite.scale.y = window.size_Sun*1.0*4.5;
+							sprite.scale.z = 1.;
+							
+							sprite2.scale.x = window.size_Sun*2.7*4.5;
+							sprite2.scale.y = window.size_Sun*2.7*4.5;
+							sprite2.scale.z = 1;
+							
+							sprite3.scale.x = window.size_Sun*2.7*4.5;
+							sprite3.scale.y = window.size_Sun*2.7*4.5;
+							sprite3.scale.z = 1;	
+						}
+						else{
+							scene.remove(sprite);
+							scene.remove(sprite2);
+							scene2.remove(sprite3);
+							scene.remove(sprite4);					
+						}
+						}//star
+						
+// 						console.log(views[0].camera.fov);
+						views[0].camera.fov = fovIn;
+						views[0].camera.updateProjectionMatrix();	
+				}
+				function BrownDwarf(){
+						ClearObjects();
+						{//dwarf(main)
+							scene.remove(SphereDwarf);
+							scene.remove(SphereDwarf2);
+						
+							//red one
+							SphereDwarf = new THREE.Mesh(new THREE.SphereGeometry( 70,32,32 ), materialDwarf);//50 is the original size
+							scene.add( SphereDwarf );
+							SphereDwarf2 = new THREE.Mesh(new THREE.SphereGeometry( 69,32,32 ), materialSun1);//orange
+							scene.add( SphereDwarf2 );
+						}
+				}
+				
+				//death
+				function WhiteDwarf(){
+						ClearObjects();
+						{//dwarf(main)
+							scene.remove(SphereWhiteDwarf);
+							SphereWhiteDwarf = new THREE.Mesh(new THREE.SphereGeometry( 20,32,32 ), materialWhiteDwarf);//50 is the original size
+							scene.add( SphereWhiteDwarf );
+						}
+				}					
+				function Nebula(){//SpreadPlaneToScreen()
+						ClearObjects();
+						{//nebula (main)
+						scene.remove(quad4);
+						quadgeometry = new THREE.PlaneBufferGeometry(window.innerWidth + 300., window.innerHeight);//220 - prolonging the plane to deal with the prolonging of the view 
+						quad4 = new THREE.Mesh(quadgeometry, shaderMaterialNebula);
+						quad4.position.z = -300;//"	zoom out" without the camera
+						scene.add(quad4);
+						
+						controls.enabled = false;	
+						SpreadPlaneToScreen();
+						}
+				}
+				function NeutronStar(){//SpreadPlaneToScreen()
+						ClearObjects();
+						{//neutron star (main)
+						scene.remove(quad4);
+						quadgeometry = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight);
+						quad4 = new THREE.Mesh(quadgeometry, shaderMaterialNeutron);
+						scene.add(quad4);
+						
+						controls.enabled = false;	
+						SpreadPlaneToScreen();
+						}
+				}				
+				function RemnantHole(){//SpreadPlaneToScreen()
+						ClearObjects();
+						{//supernova remnant + black hole (main)
+						scene.remove(quad4);
+						quadgeometry = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight);
+						quad4 = new THREE.Mesh(quadgeometry, shaderMaterialNeutronHole);
+						scene.add(quad4);
+						
+						controls.enabled = false;	
+						SpreadPlaneToScreen();
+						}
+				}				
+				///////////////////////////////////
+				
+				function AddDialog(elementName, content){
+						$(elementName).empty();
+						$(content).appendTo(elementName);
+						$(elementName).dialog("open");
+				}
+			}
+
+			{//functions for the "main" script 
+			function getWindowDimensions(){
+				{//Width, Height
+				var w = window,
+					d = document,
+					e = d.documentElement,
+					g = d.getElementsByTagName('body')[0],
+					x = w.innerWidth || e.clientWidth || g.clientWidth,
+					y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+				}	
+				
+				return {
+					width:  x,
+					height: y
+				}
+			}		
+			
+			function InitThreeRenderer(Width, Height, divElement) {
+				renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: false,  preserveDrawingBuffer: true, alpha:true});
+// 				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( Width, Height );
+				renderer.setClearColor( 0x000000, 1);//black
+				divElement.appendChild( renderer.domElement );
+				
+				//shadows
+				renderer.shadowMapEnabled = true;
+				renderer.shadowMapType = THREE.PCFSoftShadowMap;
+				// object3d.castShadow = true;
+				// object3d.receiveShadow = false;
+				renderer.autoClear = false;//this allows rendering of two scenes together, but destroys the screen edges
+		
+				return{
+						renderer: renderer 
+				}				
+			}	
+			function InitThreeScene() {
+				scene = new THREE.Scene();		//main view
+				scene2 = new THREE.Scene();		//main view 2
+			}
+			function InitThreeLights(){
+				{//lights
+// 				var light1 = new THREE.DirectionalLight( 0x888888, 2 );
+// 				light1.position.set( 1, 1, 1  ).normalize();
+				var light0 = new THREE.AmbientLight( 0x404040 ); //  soft white light
+				scene.add(light0);
+// 				scene.add(light1);
+
+				var light2 = new THREE.PointLight( 0xffe8d9, 2, 0 );
+				scene.add( light2 );
+				scene2.add( light2 );
+				
+				spotLight = new THREE.SpotLight( 0xffffff ); 
+				spotLight.position.set( 0, 0, 0 );
+				spotLight.target.position.set(150, 0, 0);
+				spotLight.castShadow = true; 
+				spotLight.shadowMapWidth = 1024; 
+				spotLight.shadowMapHeight = 1024; 
+				spotLight.shadowCameraNear = 15; 
+				spotLight.shadowCameraFar = 240; 
+				spotLight.shadowCameraFov = 40; 
+// 				spotLight.shadowCameraNear	= 0.01;		
+				spotLight.shadowDarkness	= 0.9;
+// 				spotLight.shadowCameraVisible	= true;
+				scene.add( spotLight );
+				scene2.add( spotLight );
+				
+				//just for the cutout sphere
+				var light2b = new THREE.DirectionalLight( 0x886688, 1 );
+				light2b.position.set( -10, 0, 10  ).normalize();				
+				scene.add(light2b);				
+				var light3 = new THREE.DirectionalLight( 0x8822CC, 2 );
+				light3.position.set( -1, -1, -1  ).normalize();
+				scene.add(light3);
+				}				
+			}
+			function InitCameras(){//also controls (zoom)
+				var view = views[0]; //views[ii];
+				camera = new THREE.PerspectiveCamera( view.fov, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.x = view.eye[ 0 ];
+				camera.position.y = view.eye[ 1 ];
+				camera.position.z = view.eye[ 2 ];
+				camera.up.x = view.up[ 0 ];
+				camera.up.y = view.up[ 1 ];
+				camera.up.z = view.up[ 2 ];
+				view.camera = camera;
+				
+				camera = new THREE.PerspectiveCamera( views[0].fov, window.innerWidth / window.innerHeight, 1, 10000 );
+				controls = new THREE.TrackballControls( views[0].camera, renderer.domElement );
+				controls.noZoom = false;
+				controls.noPan = true;
+				controls.minDistance = 450;
+				controls.maxDistance = 500;
+			}
+			
+			//objects
+			function InitEnviromentSphere(){//outside of InitObjects
+				{// starfield (enviroment sphere)
+				var starfield_geo = new THREE.SphereGeometry(space_size, 32, 32, Math.PI/2., 2*Math.PI, 0, Math.PI);//space_size, 32, 32, Math.PI/2.);//texture starting at PI/2
+				var starfield  = new THREE.Mesh(starfield_geo, starfield_material);
+				starfield.rotation.y = 90*Math.PI/180;//texture starting at PI/2 or y rotated PI/2
+				starfield.rotation.x = 61*Math.PI/180;
+				scene.add(starfield);
+				}				
+			}
+			
+			//stars
+			function InitCenter(){
+				group = new THREE.Object3D();
+				geometry_center = new THREE.SphereGeometry( size_Sun, 32, 32 );
+				var material = new THREE.MeshLambertMaterial( { color: 0xFFFFFF}  );
+				center = new THREE.Mesh( geometry_center, materialSun );
+				scene.add( center );
+			}
+			function InitStarSprites(){
+				{//sprites (star)
+					// sun-sprite
+					sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_Sun_Sprite,
+						transparent: true,
+						blending: THREE.AdditiveBlending,
+						useScreenCoordinates: true,
+						color: 0xE86C19,//yellow
+						depthWrite: true,
+						depthTest: true,
+						alphaTest: 0.2
+					}));
+					sprite.scale.x = size_Sun*1.0*4.5;
+					sprite.scale.y = size_Sun*1.0*4.5;
+					sprite.scale.z = 1.;
+					scene.add(sprite);
+
+
+					sprite2 = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_sprite2_yellow, //texture_sprite2,
+						transparent: true,
+						blending: THREE.AdditiveBlending,
+						useScreenCoordinates: true,
+						color: 0xffffff,
+						depthWrite: false,
+						depthTest: false,
+						alphaTest: 0.2, 
+	// 					rotation: Math.PI / 4,
+					}));
+					sprite2.scale.x = size_Sun*2.7*4.5;
+					sprite2.scale.y = size_Sun*2.7*4.5;
+					sprite2.scale.z = 1;
+					scene.add(sprite2);
+// 					scene2.add(sprite2);
+
+					sprite3 = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_sprite2_yellow, //texture_sprite2,
+						transparent: true,
+						blending: THREE.AdditiveBlending,
+						useScreenCoordinates: true,
+						color: 0xffffff,
+						depthWrite: false,
+						depthTest: true,
+						alphaTest: 0.2,
+					}));
+					sprite3.scale.x = size_Sun*2.7*4.5;
+					sprite3.scale.y = size_Sun*2.7*4.5;
+					sprite3.scale.z = 1;
+// 					sprite3.rotation.z = 90*Math.PI/180;//sprite.material.rotation
+					scene2.add(sprite3);//to occlude the Earth,Moon
+
+					sprite4 = new THREE.Sprite(new THREE.SpriteMaterial({
+						map: texture_sprite2_yellow, //texture_sprite2,
+						transparent: true,
+						blending: THREE.AdditiveBlending,
+						useScreenCoordinates: true,
+						color: 0xffffff,
+						depthWrite: false,
+						depthTest: true,
+						alphaTest: 0.2,
+					}));
+					sprite4.scale.x = size_Sun*2.7*4.5;
+					sprite4.scale.y = size_Sun*2.7*4.5;
+					sprite4.scale.z = 1;
+					scene.add(sprite4);//to occlude the Earth,Moon
+				}				
+			}
+
+			//protostar
+			function initParticles2(acc1, size, spreadUp, spreadSide) {//fire
+				particleGroup3 = new SPE.Group({
+					texture: trailTex,
+					maxAge: 9,
+// 					blending: THREE.AdditiveBlending
+				});
+				//fire down	
+				emitter3 = new SPE.Emitter({
+					position: new THREE.Vector3(0, 0, 0),
+					acceleration: new THREE.Vector3(0, acc1, 0),
+					accelerationSpread: new THREE.Vector3(0.7, spreadUp, 0.7),
+					velocity: new THREE.Vector3(0, acc1, 0),
+					colorStart: (new THREE.Color()).setRGB(1.0, 0.4, 0.2),
+					sizeStart: size,
+					sizeEnd: 0,
+					particleCount: 500
+				});
+				particleGroup3.addEmitter( emitter3 ); 
+				
+				//fire up
+				emitter4 = new SPE.Emitter({
+					position: new THREE.Vector3(0, 0, 0),
+					acceleration: new THREE.Vector3(0, -acc1, 0),
+					accelerationSpread: new THREE.Vector3(0.7, spreadUp, 0.7),
+					velocity: new THREE.Vector3(0, -acc1, 0),
+					colorStart: (new THREE.Color()).setRGB(1.0, 0.4, 0.2),
+					sizeStart: size,
+					sizeEnd: 0,
+					particleCount: 500
+				});
+				particleGroup3.addEmitter( emitter4 );
+				
+				//fire arround
+				emitter5 = new SPE.Emitter({
+					position: new THREE.Vector3(0, 0, 0),
+					acceleration: new THREE.Vector3(0, 0, 0),
+					accelerationSpread: new THREE.Vector3(spreadSide, 4, spreadSide),
+					velocity: new THREE.Vector3(0, 0, 0),
+					colorStart: (new THREE.Color()).setRGB(1.0, 0.4, 0.2),//setRGB(0.5, 0.3, 1.0),//purple
+					sizeStart: size,
+					sizeEnd: 0,
+					particleCount: 1500
+				});
+				particleGroup3.addEmitter( emitter5 );	
+			} 						
+			function InitPositionsPointCloud(pointCloudName, verticesName, innerRadius, outerRadius){//point cloud positions in XZ plane
+				verticesName = pointCloudName.geometry.vertices;
+				for( var i = 0; i < verticesName.length; i++ ){
+					verticesName[i].x = Math.random() * outerRadius - innerRadius;//random numbers between the two
+					verticesName[i].z = Math.random() * outerRadius - innerRadius;
+					verticesName[i].y = 0.;
+					//circle, not a square (pick up the ones sticking out)
+					while (verticesName[i].z*verticesName[i].z > innerRadius*innerRadius-verticesName[i].x*verticesName[i].x) verticesName[i].z = Math.random() * outerRadius - innerRadius;
+				}
+			}
+			function InitPositionsSpiralGalaxy(){
+			      	for ( i = 0; i < numStars1; ++i ){
+					vector = new THREE.Vector3( 0, 0, 0 );	
+					
+					var t = tMax * Math.random();
+					var x = a * Math.exp(b * t) * Math.cos(t);
+					x = x + (drift*x*Math.random()) - (drift*x*Math.random());
+					var y = a * Math.exp(b * t) * Math.sin(t);
+					y = y + (drift*y*Math.random()) - (drift*y*Math.random());
+					var z = Math.random()*10.;
+					if (Math.random() > 0.5) {
+						vector.x = x;
+						vector.y = y;
+						vector.z = z;
+						geometry1.vertices.push(vector);
+					}
+					else { 
+						vector.x = -x;
+						vector.y = -y;
+						vector.z = z;
+						geometry1.vertices.push(vector);
+					}
+			// 		geometry1.vertices.push(vector);
+				}
+			}
+			function InitSpiralPointCloud(){//3x point clouds circling around the star + spiral galaxy shaped point cloud
+				{//sprite movers
+					var nullvector = new THREE.Vector3( 0, 0, 0 );
+				
+					{//inner ring
+					geometry = new THREE.Geometry();
+					for ( i = 0; i < numParticles; ++i ){
+						geometry.vertices.push( new THREE.Vector3(nullvector));
+					}
+					spiral = new THREE.PointCloud( geometry, shaderMaterialPointCloud );
+					spiral.sortParticles = true;
+					InitPositionsPointCloud(spiral, verticesSpiral, i1, o1);//values into verticesSpiral (spiral.geometry.vertices)
+					//shader (particle color and size) within Protostar()
+					}
+					
+					{//middle ring
+					geometry2 = new THREE.Geometry();
+					for ( i = 0; i < numParticles; ++i ){
+						geometry2.vertices.push( new THREE.Vector3(nullvector));
+					}					
+					spiral2 = new THREE.PointCloud( geometry2, shaderMaterialPointCloud2 );
+					spiral2.sortParticles = true;
+					InitPositionsPointCloud(spiral2, verticesSpiral2, i2, o2);//values into verticesSpiral2 (spiral2.geometry.vertices)
+					//shader (particle color and size) within Protostar()
+// 					scene.add( spiral2 );
+					}
+					
+					{//outer ring
+					geometry3 = new THREE.Geometry();
+					for ( i = 0; i < numParticles; ++i ){
+						geometry3.vertices.push( new THREE.Vector3(nullvector));
+					}
+					
+					spiral3 = new THREE.PointCloud( geometry3, shaderMaterialPointCloud3 );
+					spiral3.sortParticles = true;
+					InitPositionsPointCloud(spiral3, verticesSpiral3, i3, o3);//values into verticesSpiral3 (spiral3.geometry.vertices)
+					//shader (particle color and size) within Protostar()
+// 					scene.add( spiral3 );
+					}
+					
+					{//galaxy
+					geometry1 = new THREE.Geometry();
+					InitPositionsSpiralGalaxy();//values into geometry1.vertices
+					galaxy1 = new THREE.PointCloud( geometry1, shaderMaterialGalaxy );
+					galaxy1.rotation.x = 90*Math.PI/180;
+// 					scene2.add(galaxy1);
+
+					//shader (size and color)
+					galaxySize = attributesGalaxy.variableSize.value;
+					galaxyColor = attributesGalaxy.variableColor.value;
+					for( var i = 0; i < numStars1; i++ ){ //colors	geometry1.vertices.length
+						galaxySize[i] = 45 + 120 * Math.random();//95//195
+						galaxyColor[i] = new THREE.Color();
+						galaxyColor[i].setRGB(1.0,Math.random()-0.1,0.1);
+					}
+					}
+				}				
+			}
+
+			function InitAxes(){
+				var axis = new THREE.AxisHelper(175);
+				scene.add(axis);  
+			}
+			
+			function InitObjects(){
+				//star
+				InitCenter();//the star
+				InitStarSprites();//(the star functions set the OnIgnite variable)
+
+				//protostar
+				initParticles2(fire_acceleration, fire_sizeStart, fire_spreadUp, fire_spreadSide);//emitter3, emitter4, emitter5 (particleGroup3) (protostar fire)
+				InitSpiralPointCloud();//for protostars
+				
+// 				InitAxes();//independent
+			}
+			
+			//shader
+			function InitShaderUniforms(){//new shader values
+				//uniforms.resolution.value.x = window.innerWidth;//star
+				//uniforms.resolution.value.y = window.innerHeight;
+				uniformsNebula.resolution.value.x = window.innerWidth;//nebula + white dwarf
+				uniformsNebula.resolution.value.y = window.innerHeight;
+ 				uniformsNebula.mouseX.value = mouse.x;
+				uniformsNebula.mouseY.value = mouse.y;
+				uniformsNeutron.resolution.value.x = window.innerWidth;//neutron star + supernova remnant
+				uniformsNeutron.resolution.value.y = window.innerHeight;
+ 				uniformsNeutron.mouseX.value = mouse.x;
+				uniformsNeutron.mouseY.value = mouse.y;
+				uniformsNeutronHole.resolution.value.x = window.innerWidth;//black hole + supernova remnant
+				uniformsNeutronHole.resolution.value.y = window.innerHeight;
+ 				uniformsNeutronHole.mouseX.value = mouse.x;
+				uniformsNeutronHole.mouseY.value = mouse.y;
+			}			
+			function InitShaderAttributes(){//random displacement + protostar rings sprite rotation
+				{//vertex displacement via vertex shader
+				var verts = center.geometry.vertices;
+				var values = attributes.displacement.value;//not used
+				for(var v = 0; v < verts.length; v++) {
+					values.push(Math.random() * 2.05);
+				}
+				}
+				
+				{//protostar outer ring sprite rotation
+				values2 = attributes6.variableRotation.value;//do NOT define this array here if it is to be animated!
+				for(var v = 0; v < numParticles; v++) {
+					values2.push((Math.random()*10000.)*Math.PI/180);
+				}
+				}
+				
+				{//protostar middle ring sprite rotation
+				values3 = attributes5.variableRotation.value;//do NOT define this array here if it is to be animated!
+				for(var v = 0; v < numParticles; v++) {
+					values3.push((Math.random()*10000.)*Math.PI/180);
+				}
+				}
+			}
+	
+			//listeners
+			function onWindowResize() {//update uniforms//new shader values
+				//uniforms.resolution.value.x = window.innerWidth;
+				//uniforms.resolution.value.y = window.innerHeight;
+				uniformsNebula.resolution.value.x = window.innerWidth;
+				uniformsNebula.resolution.value.y = window.innerHeight;
+				uniformsNeutron.resolution.value.x = window.innerWidth;
+				uniformsNeutron.resolution.value.y = window.innerHeight;
+				uniformsNeutronHole.resolution.value.x = window.innerWidth;
+				uniformsNeutronHole.resolution.value.y = window.innerHeight;								
+// 				console.log('resolution',window.innerWidth, window.innerHeight);
+				
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				//browser zoom
+// 				console.log('zoom', Math.round(window.devicePixelRatio * 100));
+			}		
+			function onDocumentMouseMove( event ) {//update uniforms
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			}			
+			function onDocumentMouseDown( event ) {//update uniforms//new shader values
+				uniformsNebula.mouseX.value = event.clientX;
+				uniformsNebula.mouseY.value = -event.clientY;
+				uniformsNeutron.mouseX.value = event.clientX;
+				uniformsNeutron.mouseY.value = -event.clientY;
+				uniformsNeutronHole.mouseX.value = event.clientX;
+				uniformsNeutronHole.mouseY.value = -event.clientY;
+// 				console.log("event.clientX",event.clientX, -event.clientY);
+			}
+			function onDocumentTouchMove( event ) {//touch for plane shaders
+				event.preventDefault();
+
+// 				touch.x = event.touches[ 0 ].pageX - window.innerWidth/2;
+// 				touch.y = event.touches[ 0 ].pageY - window.innerHeight/2;
+
+				//same as event.clientX, -event.clientY [0,0] to [X, -Y]
+				touch.x = event.touches[ 0 ].pageX;
+				touch.y = -event.touches[ 0 ].pageY;
+
+				//same as the mouse [-1,-1] lower left to [1,1] upper right
+// 				touch.x = (event.touches[ 0 ].pageX - window.innerWidth/2)/window.innerWidth*2;
+// 				touch.y = -(event.touches[ 0 ].pageY - window.innerHeight/2)/window.innerHeight*2;
+				
+// 				console.log(touch.x, touch.y);
+
+				uniformsNebula.touchX.value = touch.x;
+				uniformsNebula.touchY.value = touch.y;
+				uniformsNeutron.touchX.value = touch.x;
+				uniformsNeutron.touchY.value = touch.y;
+				uniformsNeutronHole.touchX.value = touch.x;
+				uniformsNeutronHole.touchY.value = touch.y;
+			}
+			function AddListeners(){
+				window.addEventListener( 'resize', onWindowResize, false );
+				window.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				window.addEventListener( 'mousemove', onDocumentMouseDown, false );//yes, mousemove (for smooth plane shader moving)
+				window.addEventListener( 'touchmove', onDocumentTouchMove, false );
+			}
+			
+			//animate and render
+			function updateSize() {
+				if ( windowWidth != window.innerWidth || windowHeight != window.innerHeight ) {
+					windowWidth  = window.innerWidth;
+					windowHeight = window.innerHeight;
+					renderer.setSize ( windowWidth, windowHeight );
+				}
+			}
+			function animate() {
+				controls.update();
+				requestAnimationFrame( animate );
+				
+				{//star
+				if(OnIgnite){//sprite size
+					sprite.scale.x = Math.abs(0.01*Math.sin(uniforms.time.value ) + 1.0)*size_Sun*1.0*4.5;
+					sprite.scale.y = Math.abs(0.01*Math.sin(uniforms.time.value ) + 1.0)*size_Sun*1.0*4.5;
+					sprite.material.rotation -= 0.1*Math.PI/180;
+					
+					sprite2.scale.x = Math.abs(0.01*Math.sin(uniforms.time.value ) + 1.1)*size_Sun*2.7*4.5;
+// 					sprite2.scale.y = size_Sun*2.7*4.5;
+// 					sprite2.scale.z = 1;
+					sprite2.material.rotation += 0.025*Math.PI/180;
+
+					sprite3.scale.x = Math.abs(0.012*Math.cos(uniforms.time.value ) + 1.1)*size_Sun*2.7*4.5;
+					sprite3.scale.y = Math.abs(0.012*Math.sin(uniforms.time.value ) + 1.1)*size_Sun*2.7*4.5;
+// 					sprite3.scale.z = 1;
+					sprite3.material.rotation -= 0.04*Math.PI/180;
+// 				
+					sprite4.scale.x = Math.abs(0.9*Math.cos(uniforms.time.value *0.01))*size_Sun*2.7*4.5;
+					sprite4.scale.y = Math.abs(0.9*Math.sin(uniforms.time.value *0.01))*size_Sun*2.7*4.5;
+					sprite4.material.rotation += 0.05*Math.PI/180;
+				}
+				}//star
+		
+				{//protostar
+				{//trail particles (without orbiter)
+				if(particleGroup3) particleGroup3.tick( 0.3 / 10.);//emitter3, emitter4, emitter5 (particleGroup3) (protostar fire)
+				}							
+
+				{//protostar pointcloud update
+				if(spiral) spiral.rotation.y+=0.005;
+				if(spiral2) spiral2.rotation.y+=0.003;
+				if(spiral3) spiral3.rotation.y+=0.001;
+				if(galaxy1) galaxy1.rotation.z-=0.005;
+				}				
+				}//protostar
+		
+				render();
+			}
+			function render(dt) {
+				{//shader uniform update
+				var delta = 5 * clock.getDelta();
+				
+				uniforms.time.value += 0.2 * delta;//star 
+				//uniforms3 -> point cloud
+				uniformsDwarf.time.value += 0.2 * delta;//brown dwarf
+				uniformsWhiteDwarf.time.value +=  0.2 * delta;//white dwarf
+				uniformsNebula.time.value +=  0.2 * delta;//nebula
+				uniformsNeutron.time.value +=  0.2 * delta;//neutron star
+				uniformsNeutronHole.time.value +=  0.2 * delta;//remnant + black hole
+				}
+
+				{//shader attributes (protostar sprite texture shader rotation)
+				for(var v = 0; v < numParticles; v++) {
+					values2[v]+=Math.random()*0.05;//outer ring sprite rotation
+					values3[v]+=Math.random()*0.02;//middle ring sprite rotation
+				}
+				}
+				
+				{//views (render)
+					updateSize();
+				
+					view = views[0];
+					camera = view.camera;
+// 					view.updateCamera( camera, scene, mouseX, mouseY );
+
+					var left   = Math.floor( windowWidth  * view.left );
+					var bottom = Math.floor( windowHeight * view.bottom );
+					var width  = Math.floor( windowWidth  * view.width );
+					var height = Math.floor( windowHeight * view.height );
+					renderer.setViewport( left, bottom, width, height );
+					renderer.setScissor( left, bottom, width, height );					
+					renderer.enableScissorTest ( true );
+					renderer.setClearColor( view.background );
+
+					camera.aspect = width / height;
+					camera.updateProjectionMatrix();
+
+					renderer.render( scene, camera );
+					renderer.clearDepth();
+					renderer.render( scene2, camera );
+				}	
+			}//render
+			}
+		</script>		
+		
+		<script>//main (parameters)
+			{//init variables
+				{//general
+					var x;
+					var customWidth = getWindowDimensions().width;
+					var customHeight = getWindowDimensions().height;
+					console.log(customWidth, customHeight);
+						
+					var mouse = new THREE.Vector3( 0, 0, 1 );//needs to initiate
+					var mouseX = 0;
+					var mouseY = 0;
+					var touch = new THREE.Vector3( 0, 0, 1 );//needs to initiate
+					var touchX = 0;
+					var touchY = 0;				
+					
+					var clock = new THREE.Clock();				
+					
+					var camera, scene, renderer, scene2;
+					var space_size = 8520;
+						
+					//spread plane to screen
+					var vFOV0, dist;//var vFOV0 = views[0].camera.fov * Math.PI / 180;        // convert vertical fov to radians
+				}
+				{//protostar	
+					{//fire parameters			    
+						var emitter3, emitter4, emitter5, particleGroup3;//fire
+						var fire_acceleration = 6;
+						var fire_sizeStart = 150;
+						var fire_spreadUp = 35;
+						var fire_spreadSide = 12;
+					}
+					//particle movers shader materials
+					var shaderMaterialPointCloud, uniforms3, attributes3;
+					var shaderMaterialPointCloud2, attributes5, uniforms5;
+					var shaderMaterialPointCloud3, attributes6, uniforms6;
+					var shaderMaterialGalaxy, attributesGalaxy, uniformsGalaxy;//galaxy
+					
+					//particle movers
+					var numParticles = 500;
+					var spiral, verticesSpiral, particleColor, particleSize, o1 = 1300; i1 = 650;		//protostar first ring
+					var spiral2, verticesSpiral2, particleColor2, particleSize2, o2 = 2000; i2 = 1000;	//protostar second, ring
+					var spiral3, verticesSpiral3, particleColor3, particleSize3, o3 = 2800; i3 = 1400;	//protostar third ring
+					var galaxy1, galaxyColor, galaxySize;							//protostar galaxy
+					var values2 = [];//protostar outer ring sprite rotation
+					var values3 = [];//protostar middle ring sprite rotation
+					
+					{//galaxy parameters (i.e. protostar ring)
+						var numStars1 = 5000;
+						var a = 4.4;//1.1
+						var b = 0.18;//0.17
+						var windings = 4.5;//3.7
+						var tMax = 2.0 * Math.PI * windings;        
+						var drift = 0.16;//0.35;//0.3;
+					}
+				}
+				{//main sequence / post main sequence
+					var size_Sun = 50;//changing the size not properly included - fixed			
+					var init_size_Sun = size_Sun;
+					var OnIgnite = true;		//for GUI function: MainSequence, for animate() (star sprites)
+					var sprite, sprite2, sprite3, sprite4;//sun sprite
+					var materialSun, uniforms, attributes;
+				}
+				{//brown dwarf 
+					var materialSun1;//uniforms, attributes
+					var SphereDwarf, SphereDwarf2;
+					var materialDwarf, uniformsDwarf;
+				}
+				{//death
+					{//white dwarf (WhiteDwarf())
+						var SphereWhiteDwarf;
+						var materialWhiteDwarf, uniformsWhiteDwarf;
+					}
+					var quadgeometry, quad4;
+					{//white dwarf and nebula (Nebula())
+						var shaderMaterialNebula, uniformsNebula;
+					}
+					{//neutron star and supernova remnant (NeutronStar())
+						var shaderMaterialNeutron, uniformsNeutron;
+					}
+					{//black hole and supernova remnant (RemnantHole())
+						var shaderMaterialNeutronHole, uniformsNeutronHole;
+					}			    
+				}
+			}
+			{//views
+			var windowWidth, windowHeight;
+			var views = [
+				{//large one
+					left: 0.0,//x
+					bottom: 0.0,//y
+					width: 1.3,
+					height: 1.0,
+					background: new THREE.Color().setRGB( 0.5, 0.5, 0.7 ),
+					eye: [0, 500, 1200 ],
+					up: [ 0, 1, 0 ],
+					fov: 60,
+				}
+			];//view
+			}		
+			{//load images (textures)
+				//environment sphere
+				var texture_starfield = THREE.ImageUtils.loadTexture( 'Images/Milky4k_flipped_dark2.jpg');
+				
+				//protostar
+				//var guidePointTexture = THREE.ImageUtils.loadTexture( 'Images/tex_sprite.png' );
+				var trailTex = THREE.ImageUtils.loadTexture('Images/tex_smoke.png');
+				var texture_spark = THREE.ImageUtils.loadTexture( "Images/tex_spark.png" );//shader texture
+				
+				//brown dwarf
+				var texture_red_atmosphere = THREE.ImageUtils.loadTexture( "Images/tex_dwarf_red.jpg" );//shader texture 
+				
+				//stars
+				var texture_Sun_Sprite = THREE.ImageUtils.loadTexture('Images/tex_sprite.png');
+				//MS:	texture_sprite2_blue, texture_sprite2_white, texture_sprite2_yellow, texture_sprite2_orange
+				//PMS:	texture_sprite2_postblue, texture_sprite2_postwhite, texture_sprite2_postyellow
+				var texture_sprite2_blue = THREE.ImageUtils.loadTexture('Images/tex_sprite7.png');//light blue
+				var texture_sprite2_white = THREE.ImageUtils.loadTexture('Images/tex_sprite8.png');//light yellow (gray) (yellow)
+				var texture_sprite2_yellow = THREE.ImageUtils.loadTexture('Images/tex_sprite3.png');//yellow
+				var texture_sprite2_orange = THREE.ImageUtils.loadTexture('Images/tex_sprite6.png');//red (4d)
+				var texture_sprite2_postblue = THREE.ImageUtils.loadTexture('Images/tex_sprite4.png');//blue
+				var texture_sprite2_postwhite = texture_sprite2_yellow; //THREE.ImageUtils.loadTexture('Images/tex_sprite3.png');//yellow
+				var texture_sprite2_postyellow = texture_sprite2_orange; //THREE.ImageUtils.loadTexture('Images/tex_sprite6.png');//red (orange) (4d2)
+				var texture_cloud = THREE.ImageUtils.loadTexture( "Images/tex_cloud.png" );//shader texture
+				
+				//star textures
+				var BlueStar = THREE.ImageUtils.loadTexture( 'Images/tex_lava5.jpg');
+				var YellowStar = THREE.ImageUtils.loadTexture( 'Images/tex_lava.jpg');
+				var RedStar = THREE.ImageUtils.loadTexture( 'Images/tex_lava3.jpg');
+				
+				//death
+				//shader background texture
+				var texture_starfield_shader = THREE.ImageUtils.loadTexture( 'Images/Milky4k.jpg');				
+				var texture_white_atmosphere = THREE.ImageUtils.loadTexture( "Images/tex_dwarf_white.jpg" );//shader texture
+				var texture_darkred_atmosphere = THREE.ImageUtils.loadTexture( 'Images/tex_dwarf_red2.jpg');//shader texture
+				var texture_noise = THREE.ImageUtils.loadTexture( 'Images/tex_noise.jpg');
+			}		
+			{//materials (textures)
+				//environment sphere
+				var starfield_material  = new THREE.MeshBasicMaterial( { map: texture_starfield,  side: THREE.BackSide });	
+			}
+			{//shader materials
+			//for planar shaders: (Nebula, Neutron Star, Remnant Hole)
+			//full rotation is with touch, can be replaced with mouse full rotation if needed
+			//via the map() function - a limited mouse rotation exist alonside the touch rotation			
+			
+				{//stars (materialSun, uniforms, attributes)
+				uniforms = {
+					time: { type: "f", value: 1.0 },
+ 					//resolution: { type: "v2", value: new THREE.Vector2() },
+					texture1: { type: "t", value: texture_cloud },
+					texture2: { type: "t", value: YellowStar}//texture_star
+				};
+				uniforms.texture1.value.wrapS = uniforms.texture1.value.wrapT = THREE.RepeatWrapping;
+				uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;	
+				attributes = {
+					displacement: {type: 'f',value: [] }// an empty array 
+				};
+				materialSun = new THREE.ShaderMaterial( {
+					uniforms: uniforms, 
+					attributes: attributes,
+ 					vertexShader: document.getElementById( 'vertexShaderStar' ).textContent,
+ 					fragmentShader: document.getElementById( 'fragmentShaderStar' ).textContent,
+					side: THREE.DoubleSide
+				} );
+				}//stars
+				
+				{//protostar (shaderMaterialPointCloud, attributes3, uniforms3, shaderMaterialPointCloud2, attributes5, uniforms5, shaderMaterialPointCloud3, attributes6, uniforms6, shaderMaterialGalaxy, attributesGalaxy, uniformsGalaxy)
+				{//protostar first ring
+				attributes3 = {
+					variableSize: {  type: 'f', value: [] },
+					variableColor: { type: 'c', value: [] },
+// 					variableRotation: {  type: 'f', value: [] }
+				};
+				uniforms3 = {
+					factor: { type: "f", value: 100.0 },
+					factor2: { type: "f", value: 1.0 },
+					color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+					texture1:   { type: "t", value: trailTex }
+				};
+				shaderMaterialPointCloud = new THREE.ShaderMaterial( {
+					uniforms:       uniforms3,
+					attributes:     attributes3,
+					vertexShader:   document.getElementById( 'vertexshaderPointCloud' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentshaderPointCloud' ).textContent,
+					sizeAttenuation: true, 
+					depthTest: true,
+					depthWrite: false,//opacity     : 0.1,
+					transparent: true,//alphaTest: 0.5
+					blending: THREE.AdditiveBlending
+				});				
+				}
+				{//protostars second ring material (spiral2)
+				attributes5 = {
+					variableSize: {  type: 'f', value: [] },
+					variableColor: { type: 'c', value: [] },
+					variableRotation: {  type: 'f', value: [] }
+				};
+				uniforms5 = {
+					factor: { type: "f", value: 200.0 },
+					factor2: { type: "f", value: 0.8 },					
+					color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+					texture1:   { type: "t", value: trailTex }
+				};
+				shaderMaterialPointCloud2 = shaderMaterialPointCloud.clone();
+				shaderMaterialPointCloud2.blending = THREE.NormalBlending;
+// 				shaderMaterialPointCloud2.uniforms.factor.value = 200.0;
+// 				shaderMaterialPointCloud2.uniforms.factor2.value = 0.8;
+				shaderMaterialPointCloud2.uniforms = uniforms5;
+				shaderMaterialPointCloud2.attributes = attributes5;
+				}
+				{//protostars third ring material (spiral3)
+				attributes6 = {
+					variableSize: {  type: 'f', value: [] },
+					variableColor: { type: 'c', value: [] },
+					variableRotation: {type: 'f', value: [] }
+				};
+				uniforms6 = {
+					factor: { type: "f", value: 100.0 },
+					factor2: { type: "f", value: 0.2 }, //0.6
+					color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+					texture1:   { type: "t", value: trailTex }
+				};
+				shaderMaterialPointCloud3 = shaderMaterialPointCloud.clone();
+				shaderMaterialPointCloud3.blending = THREE.NormalBlending;
+				shaderMaterialPointCloud3.uniforms = uniforms6;
+				shaderMaterialPointCloud3.attributes = attributes6;
+				}
+				{//galaxy shader
+				attributesGalaxy = {
+					variableSize: {  type: 'f', value: [] },
+					variableColor: { type: 'c', value: [] }
+// 					variableRotation: {  type: 'f', value: [] }					
+				};
+				uniformsGalaxy = {
+					factor: { type: "f", value: 500.0 },
+					factor2: { type: "f", value: 0.5 },		
+					color:     { type: "c", value: new THREE.Color( 0xffccff ) },
+					texture1:   { type: "t", value: texture_spark }
+				};		
+				shaderMaterialGalaxy = shaderMaterialPointCloud.clone();
+// 				shaderMaterialGalaxy.blending = THREE.AdditiveBlending;
+				shaderMaterialGalaxy.uniforms = uniformsGalaxy;
+				shaderMaterialGalaxy.attributes = attributesGalaxy;
+				}				
+				}//protostar
+
+				{//brown dwarf (materialSun1, uniforms, attributes)(materialDwarf, uniformsDwarf)
+				materialSun1 = new THREE.ShaderMaterial( {
+					uniforms: uniforms, 
+					attributes: attributes,
+ 					vertexShader: document.getElementById( 'vertexShaderStar' ).textContent,
+ 					fragmentShader: document.getElementById( 'fragmentShaderSun' ).textContent,
+ 					side: THREE.DoubleSide//just for the cutout sphere
+				} );
+				uniformsDwarf = {
+					time: { type: "f", value: 0.0 },
+					texture1: { type: "t", value: texture_red_atmosphere }
+				};
+				uniformsDwarf.texture1.value.wrapS = uniformsDwarf.texture1.value.wrapT = THREE.RepeatWrapping;
+				materialDwarf = new THREE.ShaderMaterial( {
+					uniforms: uniformsDwarf,
+					vertexShader: document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShaderDwarf' ).textContent,
+					transparent: true
+				} );				
+				}
+
+				{//white dwarf (materialWhiteDwarf, uniformsWhiteDwarf)
+				uniformsWhiteDwarf = {
+					time: { type: "f", value: 0.0 },
+					texture1: { type: "t", value: texture_white_atmosphere }
+				};
+				uniformsWhiteDwarf.texture1.value.wrapS = uniformsWhiteDwarf.texture1.value.wrapT = THREE.RepeatWrapping;
+				materialWhiteDwarf = new THREE.ShaderMaterial( {
+					uniforms: uniformsWhiteDwarf,
+					vertexShader: document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShaderWhiteDwarf' ).textContent,
+					transparent: false
+				} );								
+				}
+
+				{//nebula (white dwarf and nebula) (shaderMaterialNebula, uniformsNebula)
+				uniformsNebula = {
+					time: { type: "f", value: 1.0 },
+ 					resolution: { type: "v2", value: new THREE.Vector2() },
+					texture1:   { type: "t", value: texture_darkred_atmosphere },
+					texture2:   { type: "t", value: texture_starfield_shader },
+					mouseX: { type: "f", value: 0.0 },
+ 					mouseY: { type: "f", value: 0.0 },
+ 					touchX: { type: "f", value: 0.0 },
+ 					touchY: { type: "f", value: 0.0 }					
+				};
+				uniformsNebula.texture1.value.wrapS = uniformsNebula.texture1.value.wrapT = THREE.RepeatWrapping;
+// 				uniformsNebula.texture2.value.wrapS = uniformsNebula.texture2.value.wrapT = THREE.RepeatWrapping;	
+				shaderMaterialNebula = new THREE.ShaderMaterial( {
+					uniforms:       uniformsNebula,//attributes:     attributes3,
+					vertexShader:   document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShaderNebula' ).textContent,
+					side: THREE.DoubleSide
+				});	
+				}
+				
+				{//neutron star (neutron star and supernova remnant) (shaderMaterialNeutron, uniformsNeutron)
+				uniformsNeutron = {
+					time: { type: "f", value: 1.0 },
+ 					resolution: { type: "v2", value: new THREE.Vector2() },
+					texture1:   { type: "t", value: texture_darkred_atmosphere },
+					texture2:   { type: "t", value: texture_noise },
+					texture3:   { type: "t", value: texture_starfield_shader },
+					mouseX: { type: "f", value: 0.0 },
+ 					mouseY: { type: "f", value: 0.0 },
+ 					touchX: { type: "f", value: 0.0 },
+ 					touchY: { type: "f", value: 0.0 }	 					
+				};
+				uniformsNeutron.texture1.value.wrapS = uniformsNeutron.texture1.value.wrapT = THREE.RepeatWrapping;
+				uniformsNeutron.texture2.value.wrapS = uniformsNeutron.texture2.value.wrapT = THREE.RepeatWrapping;	
+				shaderMaterialNeutron = new THREE.ShaderMaterial( {
+					uniforms:       uniformsNeutron,//attributes:     attributes3,
+					vertexShader:   document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShaderNeutron' ).textContent,
+					side: THREE.DoubleSide
+				});	
+				}
+
+				{//black hole and supernova remnant (shaderMaterialNeutronHole, uniformsNeutronHole)
+				uniformsNeutronHole = {
+					time: { type: "f", value: 1.0 },
+ 					resolution: { type: "v2", value: new THREE.Vector2() },
+					texture2:   { type: "t", value: texture_noise },
+					texture1:   { type: "t", value: texture_starfield },
+					texture3:   { type: "t", value: texture_starfield_shader },
+					mouseX: { type: "f", value: 0.0 },
+ 					mouseY: { type: "f", value: 0.0 },
+ 					touchX: { type: "f", value: 0.0 },
+ 					touchY: { type: "f", value: 0.0 }	 					
+				};
+				uniformsNeutronHole.texture1.value.wrapS = uniformsNeutronHole.texture1.value.wrapT = THREE.RepeatWrapping;
+				uniformsNeutronHole.texture2.value.wrapS = uniformsNeutronHole.texture2.value.wrapT = THREE.RepeatWrapping;	
+				shaderMaterialNeutronHole = new THREE.ShaderMaterial( {
+					uniforms:       uniformsNeutronHole,//attributes:     attributes3,
+					vertexShader:   document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShaderNeutronHole' ).textContent,
+					side: THREE.DoubleSide
+				});	
+				}
+			}//shader materials
+			{//individual star parameters
+				var proto_sizes = [0.08,0.11,0.14,0.17,0.2];//red, orange, yellow, white, blue
+				
+				{//blue star parameters
+							//proto
+// 							var ProtoColor_blue = 2;//(1 blue, 2 dustish, 3 magentish; galaxy only)
+							var ProtoParticleSize_blue = proto_sizes[4];//0.6;//8.0;
+				
+							//MS
+							var scaleIn_blue = 2.2;//5.0;
+							var textureIn_blue = BlueStar;
+							var colorIn_blue = 0x3399cc;
+							var fovIn_blue = 60;
+	
+							//PMS 
+							var scaleIn_PMS_blue = scaleIn_blue + 1.0;
+							var textureIn_PMS_blue = textureIn_blue;
+							var colorIn_PMS_blue = colorIn_blue;
+							var fovIn_PMS_blue = fovIn_blue;
+				}
+				{//white star parameters
+							//proto
+// 							var ProtoColor_white = 2;
+							var ProtoParticleSize_white = proto_sizes[3];//0.5;
+				
+							//MS
+							var scaleIn_white = 1.9;//4.0;//1.0
+							var textureIn_white = YellowStar;
+							var colorIn_white = 0x3399cc; //0xE86C19;
+							var fovIn_white = 60;				
+
+							//PMS
+							var scaleIn_PMS_white = scaleIn_white + 1.0;
+							var textureIn_PMS_white = textureIn_white;
+							var colorIn_PMS_white = 0xE86C19;;//0x3399cc;
+							var fovIn_PMS_white = fovIn_white;
+				}							
+				{//yellow star parameters
+							//proto
+// 							var ProtoColor_yellow = 2;
+							var ProtoParticleSize_yellow = proto_sizes[2];//0.4;//1.0;
+							
+							//MS  Star2_scaleIn, Star2_textureIn, Star2_colorIn, Star2_fovIn
+							var scaleIn_yellow = 1.6//3.0//1.0;
+							var textureIn_yellow = YellowStar;
+							var colorIn_yellow = 0xE86C19;
+							var fovIn_yellow = 60;
+							
+							//PMS
+							var scaleIn_PMS_yellow = scaleIn_yellow + 1.0;
+							var textureIn_PMS_yellow = RedStar;
+							var colorIn_PMS_yellow = 0xff3300;
+							var fovIn_PMS_yellow = 60;
+				}
+				{//orange star paramaters (red dwarf)
+							//proto
+// 							var ProtoColor_orange = 2;
+							var ProtoParticleSize_orange = proto_sizes[1];//0.3;//1.0;
+				
+							//MS
+							var scaleIn_orange = 1.3;//0.1
+							var textureIn_orange = RedStar;
+							var colorIn_orange = 0xcc0033;
+							var fovIn_orange = 60;
+
+							//no PMS
+				}				
+				{//red star parameters (brown dwarf)
+							//proto
+// 							var ProtoColor_red = 2;//3;
+							var ProtoParticleSize_red = proto_sizes[0];//0.25;//0.1;
+				
+							//no MS -> BrownDwarf
+							
+							//no PMS
+				}
+			}			
+		
+			{//GUI images/icons
+			//mass arrow
+			var mass_arrow_image_srcEN = 'Images/Icons/menu_mass_en.png';
+			var mass_arrow_image_srcDE = 'Images/Icons/menu_mass_de.png';			
+			
+			
+			//mass menu icons/buttons
+			var button_blue = "Images/Icons/icon_star_blue.png";
+			var button_white = "Images/Icons/icon_star_white.png";
+			var button_yellow = "Images/Icons/icon_star_yellow.png";
+			var button_orange = "Images/Icons/icon_star_red.png";
+			var button_red = "Images/Icons/icon_brown_dwarf.png";
+
+			
+			//time arrows
+			var time_arrow_brown = "'Images/Icons/menu_time_dwarf_EN.png'";
+			var time_arrow_red = "'Images/Icons/menu_time_red_EN.png'";
+			var time_arrow_yellow = "'Images/Icons/menu_time_yellow_EN.png'";
+			var time_arrow_white = "'Images/Icons/menu_time_white_EN.png'";
+			var time_arrow_blue = "'Images/Icons/menu_time_blue_EN.png'";//used for white and blue
+			var time_arrow_brown_DE = "'Images/Icons/menu_time_dwarf_DE.png'";
+			var time_arrow_red_DE = "'Images/Icons/menu_time_red_DE.png'";
+			var time_arrow_yellow_DE = "'Images/Icons/menu_time_yellow_DE.png'";
+			var time_arrow_white_DE = "'Images/Icons/menu_time_white_DE.png'";
+			var time_arrow_blue_DE = "'Images/Icons/menu_time_blue_DE.png'";//used for white and blue	
+			var time_arrow_default = time_arrow_red;
+		
+
+			//time menu icons/buttons
+			var icon_time_brown_proto = "Images/Icons/icon_time_brown_proto.png";		//proto
+			var icon_time_brown_main = "Images/Icons/icon_time_brown_main.png";		//"MS"
+			var icon_time_brown_main_DE = "Images/Icons/icon_time_brown_main_DE.png";	//"MS" DE
+			
+			var icon_time_red_proto = "Images/Icons/icon_time_red_proto.png";		//proto
+			var icon_time_red_main = "Images/Icons/icon_time_red_main.png";			//MS
+			var icon_time_red_death = "Images/Icons/icon_time_red_death.png";		//death
+			var icon_time_red_main_DE = "Images/Icons/icon_time_red_main_DE.png";		//MS DE
+			var icon_time_red_death_DE = "Images/Icons/icon_time_red_death_DE.png";		//death DE
+			
+			var icon_time_yellow_proto = "Images/Icons/icon_time_yellow_proto.png";		//proto
+			var icon_time_yellow_main = "Images/Icons/icon_time_yellow_main.png";		//MS
+			var icon_time_yellow_post = "Images/Icons/icon_time_yellow_post.png";		//PMS
+			var icon_time_yellow_death = "Images/Icons/icon_time_yellow_death.png";		//death
+			var icon_time_yellow_death_DE = "Images/Icons/icon_time_yellow_death_DE.png";	//death DE
+
+			var icon_time_white_proto = "Images/Icons/icon_time_white_proto.png";		//proto
+			var icon_time_white_main = "Images/Icons/icon_time_white_main.png";		//MS
+			var icon_time_white_post = "Images/Icons/icon_time_white_post.png";		//PMS
+			var icon_time_white_death = "Images/Icons/icon_time_white_death.png";		//death
+			var icon_time_white_death_DE = "Images/Icons/icon_time_white_death_DE.png";	//death DE
+			
+			var icon_time_blue_proto = "Images/Icons/icon_time_blue_proto.png";		//proto
+			var icon_time_blue_main = "Images/Icons/icon_time_blue_main.png";		//MS
+			var icon_time_blue_post = "Images/Icons/icon_time_blue_post.png";		//PMS
+			var icon_time_blue_death = "Images/Icons/icon_time_blue_death.png";		//death
+			var icon_time_blue_death_DE = "Images/Icons/icon_time_blue_death_DE.png";	//death DE
+			}
+			{//GUI mass menu positioning / time menu positioning / dialog positioning
+			{//mass menu
+			var main_button_bottom_start = 280;//position of the menu
+			
+			//mass menu arrow positioning (in "mass arrow image" section)
+			var mass_arrow_image_width =  190;
+			var mass_arrow_image_left = -4;
+			var mass_arrow_image_bottom = main_button_bottom_start - 5;//275;
+
+			//mass menu icons positioning
+			var mass_arrow_radio_button_width = 130;
+			var mass_arrow_radio_button_height = 130;
+			$('#radioMass').css({ "width" :150 });
+			$('#radioMass').css({ "bottom":main_button_bottom_start -5 });
+			$('#radioMass').css({ "right": 9 });
+			}
+
+			{//time menu
+			//time menu div positioning (#menu_time div)
+// 			var menu_time_width = window.innerWidth + 320;
+// 			$("#menu_time").css({ "width":menu_time_width });
+// 			var menu_time_height = 252; 
+// 			$("#menu_time").css({ "height":menu_time_height });
+
+			//time menu arrow positioning
+			var big_arrow_width = 892;
+			var big_arrow_height = 140;
+			var big_arrow_bottom = 0;
+			var big_arrow_left = 0;//750//used as right
+			var button_opacity = 0.9;//for time arrow
+			
+			//time menu icons positioning
+			var time_arrow_radio_button_width = 150;
+			var time_arrow_radio_button_height = 101;	
+			$('#radioTime').css({ "width" :800 });
+			$('#radioTime').css({ "bottom":12 });
+			$('#radioTime').css({ "right":big_arrow_left+47 });
+			}
+			
+			{//main dialog (not info/help dialog)
+			//dialog position, size
+ 			var dialog_height = 860;//($(window).height())-600;
+ 			var dialog_width = 672;
+ 			var dialog_left = 20;
+ 			var dialog_up = 20; //top	
+			}
+			}
+			//dialog texts moved to text.js
+
+			window.onload = function () { 
+				x = InitThreeRenderer(customWidth, customHeight, container);
+				x = InitThreeScene();
+				x = InitThreeLights();
+				x = InitCameras();
+				
+				x = InitEnviromentSphere();
+				x = InitObjects();
+				
+				x = InitShaderAttributes();
+				x = InitShaderUniforms();
+				
+				AddListeners();
+				animate();
+				
+				//default starting option
+				$('#starButtonYellow').trigger('click');//#starButtonBlue,#starButtonWhite,#starButtonYellow,#starButtonOrange,#starButtonRed
+			}// window.onload
+		</script>
+		
+		<script>//radio button images (mass) (time radio button images are set within mass radio buttons)
+			$('div[id="radioMass"] label[for="starButtonBlue"]').html('<img src='+button_blue+' width="'+mass_arrow_radio_button_width+'px" height="'+mass_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+			$('div[id="radioMass"] label[for="starButtonWhite"]').html('<img src='+button_white+' width="'+mass_arrow_radio_button_width+'px" height="'+mass_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+			$('div[id="radioMass"] label[for="starButtonYellow"]').html('<img src='+button_yellow+' width="'+mass_arrow_radio_button_width+'px" height="'+mass_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+			$('div[id="radioMass"] label[for="starButtonOrange"]').html('<img src='+button_orange+' width="'+mass_arrow_radio_button_width+'px" height="'+mass_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"		
+			$('div[id="radioMass"] label[for="starButtonRed"]').html('<img src='+button_red+' width="'+mass_arrow_radio_button_width+'px" height="'+mass_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"		
+			
+			//time radio button images are set within mass radio buttons
+// 			$('div[id="radioTime"] label[for="starButtonProto"]').html('<img src="'+icon_time_yellow_proto+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// 			$('div[id="radioTime"] label[for="starButtonMS"]').html('<img src="'+icon_time_yellow_main+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// 			$('div[id="radioTime"] label[for="starButtonPMS"]').html('<img src="'+icon_time_yellow_post+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"
+// 			$('div[id="radioTime"] label[for="starButtonDeath"]').html('<img src="'+icon_time_yellow_death+'" width="'+time_arrow_radio_button_width+'px" height="'+time_arrow_radio_button_height+'px" ></img>');//style="position: absolute;left:300px;bottom:195px;"	
+		</script>		
+		
+		<script>//mass arrow image
+			function getUrlVars() {
+					var vars = {};
+					var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+						function(m,key,value) {
+							vars[key] = value;
+						}
+					);
+					return vars;
+			}	
+			
+			//el.insertAdjacentHTML("afterbegin", str.charAt(i));
+			if(getUrlVars()["lang"] == "en") document.getElementById("menu_main").insertAdjacentHTML("afterbegin", "<img src="+mass_arrow_image_srcEN+" width='"+mass_arrow_image_width+"' style='position: absolute;left:"+mass_arrow_image_left+"px;bottom:"+mass_arrow_image_bottom+"px;z-index:0'></img>");
+			if(getUrlVars()["lang"] == "de") document.getElementById("menu_main").insertAdjacentHTML("afterbegin", "<img src="+mass_arrow_image_srcDE+" width='"+mass_arrow_image_width+"' style='position: absolute;left:"+mass_arrow_image_left+"px;bottom:"+mass_arrow_image_bottom+"px;'></img>");
+			if(!getUrlVars()["lang"]) document.getElementById("menu_main").insertAdjacentHTML("afterbegin", "<img src="+mass_arrow_image_srcEN+" width='"+mass_arrow_image_width+"' style='position: absolute;left:"+mass_arrow_image_left+"px;bottom:"+mass_arrow_image_bottom+"px;'></img>");	
+		</script>		
+		
+		<div id="resetButton"></div>
+		<div id="languageButton"></div>
+		<div id="dialogHelp" title="Dialog" align="center" ></div>	
+		<div id="infoButton"></div>			
+		<script>//standard buttons (don't forget:
+			//* the images (4x icons, 2x help/info screens), 
+			//* css elements (.helper, #dialogHelp), 
+			//* adjust with the other URL parameters (in #languageButton),
+			//* need customHeight, customWidth (customWidth = getWindowDimensions().width;) ; (also uses controls - can be commented out if not there)
+			//)
+			function AddDialog2(elementName, content){//needs .helper class
+				$(elementName).empty();
+				
+				//vertical alignment of the image within a div
+				var content2 = "<span class='helper'></span>";
+				$(content2).appendTo(elementName);
+				
+				$(content).appendTo(elementName);
+				$(elementName).dialog("open");
+			}
+			
+			{//parameters (using customHeight, customWidth)
+			//button positioning
+			var standard1_left = 2;
+			var standard2_left = 102;//1554;
+			var standard3_left = 202;
+			var standard_bottom = 12;
+			
+			//dialog parameters
+			var dialog_height2 = customHeight;
+			var dialog_width2 = customWidth-4;
+			var dialog_left2 = 0;
+			var dialog_up2 = 0;			
+			}
+			{//load images
+			var button_reset = "Images/Icons/icon_blue_reload.png";
+			var button_info = "Images/Icons/icon_blue_help.png";
+			var button_language = "Images/Icons/icon_blue_DE.svg";	
+			var lang = "en";			
+			
+			//language button image //change icon image (offer opposite image)
+			if(getUrlVars()["lang"] == "en") button_language = "Images/Icons/icon_blue_DE.svg";
+			if(getUrlVars()["lang"] == "de") button_language = "Images/Icons/icon_blue_EN.svg";
+			
+			//help screen images
+			var info_imageEN ='Images/0415_stellar_evolution_help_screens_ES_interactives_EN.png';
+			var info_imageDE ='Images/0415_stellar_evolution_help_screens_ES_interactives_DE.png';
+			var info_image_width = 1500;
+			}			
+
+			$(function() 
+			{
+				{//reset button
+				$("#resetButton")
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":"0.9", 
+					"position":"absolute", "bottom":standard_bottom+"px", "left":standard1_left+"px", 
+					"border": "none"
+					}) // adds CSS
+				.append("<img width='80' height='80' src="+button_reset+" />")
+				.button()
+				.click( 
+					function(){ 
+						window.location.reload(true);
+					});
+				}
+				
+				{//language change button (adjust to other URL parameters!)
+				$("#languageButton")
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":"0.9", 
+					"position":"absolute", "bottom":standard_bottom+"px", "left":standard2_left+"px", 
+					"border": "none"
+					}) // adds CSS
+				.append("<img width='80' height='80' src="+button_language+" />")
+				.button()
+				.click( 
+					function(){ 
+						//reload with different url parameter (change language)
+						if(getUrlVars()["lang"] == "en") lang="de";
+						if(getUrlVars()["lang"] == "de") lang="en";
+						if(!getUrlVars()["lang"]) lang="de";//had default values (en as default)
+
+						//no grid parameter
+						window.location.href = window.location.pathname+"?lang="+lang;
+					});
+				}
+				
+				{//info/help dialog - needs CSS setup and dialog parameters
+				$("#dialogHelp").dialog({
+					autoOpen: false,
+					modal: false,
+					dialogClass: "dlg-no-title",
+					resizable: false,
+					height: dialog_height2,
+					width: dialog_width2,
+ 					position: [dialog_left2,dialog_up2],//left, top
+					clickOutside: true, // clicking outside the dialog will close it
+					clickOutsideTrigger: "#infoButton"  // Element (id or class) that triggers the dialog opening 
+				})
+				.mouseenter(function(){
+					controls.noRotate = true;
+				})
+				.mouseleave(function(){
+					controls.noRotate = false;
+				})
+				.click( 
+					function(){ 
+						$("#dialogHelp").dialog("close");//close dialog
+					});	
+				}
+				
+				{//info/help button - needs #dialogHelp and AddDialog2() function
+				$("#infoButton")
+				.text("") // sets text to empty
+				.css(
+					{ "z-index":"2",
+					"background":"rgba(0,0,0,0)", "opacity":"0.9", 
+					"position":"absolute", "bottom":standard_bottom+"px", "left":standard3_left+"px", 
+					"border": "none"
+					}) // adds CSS
+				.append("<img width='80' height='80' src="+button_info+" />")
+				.button()
+				.click( 
+					function(){ 
+						if(getUrlVars()["lang"] == "en") AddDialog2("#dialogHelp", "<img src="+info_imageEN+" width="+info_image_width+" style='vertical-align:middle;'></img>");
+						if(getUrlVars()["lang"] == "de") AddDialog2("#dialogHelp", "<img src="+info_imageDE+" width="+info_image_width+" style='vertical-align:middle;'></img>");
+						if(!getUrlVars()["lang"]) AddDialog2("#dialogHelp", "<img src="+info_imageEN+" width="+info_image_width+" style='vertical-align:middle;'></img>");//had default values (en as default)
+					});
+				}
+			});
+		</script>				
+</body>
+</html>
